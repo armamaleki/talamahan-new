@@ -10,10 +10,10 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, privacyPolicy, training } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Mail } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Mail, ShieldCheck , GraduationCap } from 'lucide-react';
 import AppLogo from './app-logo';
 import tickets from '@/routes/tickets';
 
@@ -25,8 +25,18 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Ticket',
-        href: tickets.index().url,
+        href: tickets.index(),
         icon: Mail,
+    },
+    {
+        title: 'Privacy policy',
+        href: privacyPolicy(),
+        icon: ShieldCheck,
+    },
+    {
+        title: 'Training',
+        href: training(),
+        icon: GraduationCap,
     },
 ];
 

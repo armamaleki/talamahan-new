@@ -15,4 +15,12 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         Route::post('/store', [\App\Http\Controllers\Dashboard\TicketController::class, 'store'])->name('store');
         Route::get('/{ticket}', [\App\Http\Controllers\Dashboard\TicketController::class, 'show'])->name('show');
     });
+
+    Route::get('/privacy-policy' , function (){
+        return Inertia::render('dashboard/privacy-policy');
+    })->name('privacy-policy');
+
+    Route::get('/training' , function (){
+        return Inertia::render('dashboard/training');
+    })->name('training');
 });
