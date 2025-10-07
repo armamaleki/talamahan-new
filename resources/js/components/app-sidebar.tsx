@@ -15,6 +15,7 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Mail } from 'lucide-react';
 import AppLogo from './app-logo';
+import tickets from '@/routes/tickets';
 
 const mainNavItems: NavItem[] = [
     {
@@ -24,7 +25,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Ticket',
-        href: '/dashboard/ticket',
+        href: tickets.index().url,
         icon: Mail,
     },
 ];
