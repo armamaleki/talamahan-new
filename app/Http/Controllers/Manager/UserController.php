@@ -29,12 +29,9 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $data = $request->validated();
-        $create =User::create($data);
-        if ($create) {
-            return to_route('manager.user.index')->with('success', 'User created successfully.');
-        }else{
-            return to_route('manager.user.index')->with('error', 'Something went wrong.');
-        }
+        $create = User::create($data);
+        return to_route('manager.user.index')->with('success', 'User created successfully.');
+
     }
 
     public function show(User $user)

@@ -1,8 +1,10 @@
 import ManagerLayout from '@/layouts/manager-layout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link} from '@inertiajs/react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Eye, Plus } from 'lucide-react';
+
+
 import {
     Table,
     TableBody,

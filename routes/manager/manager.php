@@ -12,7 +12,7 @@ Route::get('/', function () {
 Route::prefix('user')->name('user.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Manager\UserController::class, 'index'])->name('index');
     Route::get('/create', [\App\Http\Controllers\Manager\UserController::class, 'create'])->name('create');
-    Route::get('/store', [\App\Http\Controllers\Manager\UserController::class, 'store'])->name('store');
+    Route::post('/store', [\App\Http\Controllers\Manager\UserController::class, 'store'])->name('store');
     Route::get('/{user}', [\App\Http\Controllers\Manager\UserController::class, 'show'])->name('show');
     Route::get('/{user}/edit', [\App\Http\Controllers\Manager\UserController::class, 'edit'])->name('edit');
     Route::put('/{user}', [\App\Http\Controllers\Manager\UserController::class, 'update'])->name('update');

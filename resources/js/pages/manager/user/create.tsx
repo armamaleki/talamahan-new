@@ -37,8 +37,38 @@ export default function() {
                                     />
                                     <InputError message={errors.name} />
                                 </div>
-                                email
-                                password
+                                <div>
+                                    <Label htmlFor="title">email</Label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        placeholder="Enter the email (required ,email , max:250 , unique)"
+                                        required
+                                    />
+                                    <InputError message={errors.email} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="title">Password</Label>
+                                    <Input
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter the password (required ,min:8 , max:250 , confirmed)"
+                                        required
+                                    />
+                                    <InputError message={errors.password} />
+                                </div>
+                                <div>
+                                    <Label htmlFor="password_confirmation">Confirm Password</Label>
+                                    <Input
+                                        id="password_confirmation"
+                                        name="password_confirmation"
+                                        type="password"
+                                        placeholder="Confirm your password (same password)"
+                                        required
+                                    />
+                                    <InputError message={errors.password_confirmation} />
+                                </div>
+
                                 <Button
                                     type="submit"
                                     className="w-full mt-2"
