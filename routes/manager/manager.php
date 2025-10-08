@@ -18,3 +18,13 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::put('/{user}', [\App\Http\Controllers\Manager\UserController::class, 'update'])->name('update');
     Route::delete('/{user}', [\App\Http\Controllers\Manager\UserController::class, 'destroy'])->name('destroy');
 });
+
+Route::prefix('role')->name('role.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Manager\RoleController::class, 'index'])->name('index');
+    Route::get('/create', [\App\Http\Controllers\Manager\RoleController::class, 'create'])->name('create');
+    Route::post('/store', [\App\Http\Controllers\Manager\RoleController::class, 'store'])->name('store');
+    Route::get('/{role}', [\App\Http\Controllers\Manager\RoleController::class, 'show'])->name('show');
+    Route::get('/{role}/edit', [\App\Http\Controllers\Manager\RoleController::class, 'edit'])->name('edit');
+    Route::put('/{role}', [\App\Http\Controllers\Manager\RoleController::class, 'update'])->name('update');
+    Route::delete('/{role}', [\App\Http\Controllers\Manager\RoleController::class, 'destroy'])->name('destroy');
+});

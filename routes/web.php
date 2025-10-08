@@ -14,7 +14,7 @@ require __DIR__ . '/dashboard.php';
 
 Route::prefix('manager')
     ->name('manager.')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified' , 'permission:show-admin-panel'])
     ->group(function () {
         require __DIR__ . '/manager/manager.php';
     });

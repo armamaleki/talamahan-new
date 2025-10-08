@@ -2,7 +2,6 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
-    SidebarGroup,
     SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
@@ -15,13 +14,20 @@ import AppLogo from '@/components/app-logo';
 import manager from '@/routes/manager';
 import { NavMain } from '@/components/nav-main';
 import type { NavItem } from '@/types';
-import { Users } from 'lucide-react';
+import { Users, ShieldQuestion } from 'lucide-react';
+
 import user from '@/routes/manager/user';
+import role from '@/routes/manager/role';
 const mainNavItems: NavItem[] = [
     {
         title: 'Users',
         href: user.index(),
         icon: Users,
+    },
+    {
+        title: 'Role',
+        href: role.index(),
+        icon: ShieldQuestion,
     },
 
 ];

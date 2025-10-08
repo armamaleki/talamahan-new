@@ -1,49 +1,34 @@
 import ManagerLayout from '@/layouts/manager-layout';
-import { Head, Link} from '@inertiajs/react';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Head, Link } from '@inertiajs/react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Eye, Plus } from 'lucide-react';
+import role from '@/routes/manager/role';
+import { TableBody, Table, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import user from '@/routes/manager/user';
-const breadcrumbs = [
-    { title: 'Manager', href: '/manager' },
-    { title: 'Users', href: '/manager/user' },
-];
-interface Users {
+interface Role {
     id: number;
-    name:string;
-    email:string;
-    created:string;
+    name: string;
+    created: string;
 }
-interface UsersPageProps {
-    usersList: {
-        data: Users[];
-    };
+interface RolePageProps {
+    roleList:{
+        data: Role[]
+    }
 }
-
-export default function UsersList({usersList}: UsersPageProps) {
-    return (
-        <ManagerLayout breadcrumbs={breadcrumbs}>
-            <Head title="Users list" />
+export default function App({roleList}:RolePageProps) {
+    return(
+        <ManagerLayout>
+            <Head title="Role list" />
             <Card>
                 <CardHeader>
                     <Button
                         className={'w-fit'}
                         size={'lg'} asChild>
                         <Link
-                            href={user.create()}>
+                            href={role.create()}>
                             <Plus />
-                            Create a new user
+                            Create a new role
                         </Link>
                     </Button>
                 </CardHeader>
@@ -54,22 +39,20 @@ export default function UsersList({usersList}: UsersPageProps) {
                             <TableRow>
                                 <TableHead className="w-[80px]">#</TableHead>
                                 <TableHead>name</TableHead>
-                                <TableHead>email</TableHead>
                                 <TableHead>created</TableHead>
+                                <TableHead>Action</TableHead>
                             </TableRow>
                         </TableHeader>
-
                         <TableBody>
-                            {usersList.data.length > 0 ? (
-                                usersList.data.map((userItem, index) => (
+                            {roleList.data.length > 0 ? (
+                                roleList.data.map((roleItem, index) => (
                                     <TableRow key={index}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{userItem?.name}</TableCell>
-                                        <TableCell>{userItem.email}</TableCell>
-                                        <TableCell>{userItem.created}</TableCell>
+                                        <TableCell>{roleItem?.name}</TableCell>
+                                        <TableCell>{roleItem?.created}</TableCell>
                                         <TableCell>
                                             <Button size={'lg'} asChild>
-                                                <Link href={user.show(userItem.id)}>
+                                                <Link href={role.show(roleItem.id)}>
                                                     <Eye className={'size-6'}/>
                                                 </Link>
                                             </Button>
@@ -86,12 +69,10 @@ export default function UsersList({usersList}: UsersPageProps) {
                                     </TableCell>
                                 </TableRow>
                             )}
+
                         </TableBody>
                     </Table>
                 </CardContent>
-                <CardFooter>
-                    PAGINATE
-                </CardFooter>
             </Card>
         </ManagerLayout>
     );
