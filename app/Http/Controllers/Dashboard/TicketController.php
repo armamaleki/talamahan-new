@@ -9,7 +9,6 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 
 use Inertia\Inertia;
-use function Laravel\Prompts\error;
 
 class TicketController extends Controller
 {

@@ -6,12 +6,8 @@ interface AppLayoutProps {
     children: ReactNode;
     breadcrumbs?: BreadcrumbItem[];
 }
-export default function ManagerLayout({
-    children,
-}: AppLayoutProps) {
-    return (
-        <ManagerSidebarLayout >
-            {children}
-        </ManagerSidebarLayout>
-    );
-}
+export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
+    <ManagerSidebarLayout breadcrumbs={breadcrumbs} {...props}>
+        {children}
+    </ManagerSidebarLayout>
+);

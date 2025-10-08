@@ -8,8 +8,13 @@ Route::get('/', function () {
 })->name('home');
 
 
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/dashboard.php';
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
-require __DIR__.'/dashboard.php';
-require __DIR__ . '/manager/manager.php';
+Route::prefix('manager')
+    ->name('manager.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+        require __DIR__ . '/manager/manager.php';
+    });

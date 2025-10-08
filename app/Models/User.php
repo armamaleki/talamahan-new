@@ -29,6 +29,13 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope('latest', function ($query) {
+            $query->orderBy('created_at', 'desc');
+        });
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

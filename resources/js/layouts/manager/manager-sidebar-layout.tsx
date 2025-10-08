@@ -1,18 +1,24 @@
-import type { PropsWithChildren } from 'react';
-import type { BreadcrumbItem } from '@/types';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppShell } from '@/components/app-shell';
 import ManagerSidebar from '@/components/manager-sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import type { BreadcrumbItem } from '@/types';
+import type { PropsWithChildren } from 'react';
+import { AppContent } from '@/components/app-content';
+import { ManagerSidebarHeader } from '@/components/manager-sidebar-header';
 
-export default function ManagerSidebarLayout({ children }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
+export default function ManagerSidebarLayout({
+    children,
+    breadcrumbs = [],
+}: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
     return (
-        <SidebarProvider>
-            <div className="flex">
+        <AppShell variant="sidebar">
+            <SidebarProvider>
                 <ManagerSidebar />
-                <SidebarTrigger />
-                <main className="flex-1">
+                <AppContent variant="sidebar" className="overflow-x-hidden">
+                    <ManagerSidebarHeader breadcrumbs={breadcrumbs} />
                     {children}
-                </main>
-            </div>
-        </SidebarProvider>
+                </AppContent>
+            </SidebarProvider>
+        </AppShell>
     );
 }

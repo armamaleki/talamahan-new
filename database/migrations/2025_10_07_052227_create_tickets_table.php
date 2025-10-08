@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('priority', ['low', 'medium', 'high'])->default('low');
             $table->foreignId('user_id')
                 ->nullable()
-                ->constrained('users')
+                ->constrained('user')
                 ->nullOnDelete();
             $table->timestamps();
         });
