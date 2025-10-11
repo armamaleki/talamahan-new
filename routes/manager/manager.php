@@ -34,3 +34,9 @@ Route::prefix('ticket')->as('ticket.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Manager\TicketController::class, 'index'])->name('index');
     Route::get('/show/{ticket}', [\App\Http\Controllers\Manager\TicketController::class, 'show'])->name('show');
 });
+
+Route::prefix('notification')->as('notification.')->group(function () {
+   Route::get('/', [\App\Http\Controllers\Manager\NotificationController::class, 'index'])->name('index');
+   Route::get('/create', [\App\Http\Controllers\Manager\NotificationController::class, 'create'])->name('create');
+   Route::post('/store', [\App\Http\Controllers\Manager\NotificationController::class, 'store'])->name('store');
+});

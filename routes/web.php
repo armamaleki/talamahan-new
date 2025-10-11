@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,3 +19,13 @@ Route::prefix('manager')
     ->group(function () {
         require __DIR__ . '/manager/manager.php';
     });
+
+Route::get('test-notic', function () {
+    $user = User::find(1);
+
+    $user->notify(new \App\Notifications\AppNotification(
+        'اعلان جدید',
+        'سفارش جدیدی ثبت شده است.',
+        ['ssssssss' => 'sssssssssssssssssssssssssssssssssss']
+    ));
+});

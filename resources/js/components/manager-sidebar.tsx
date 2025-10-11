@@ -14,11 +14,12 @@ import AppLogo from '@/components/app-logo';
 import manager from '@/routes/manager';
 import { NavMain } from '@/components/nav-main';
 import type { NavItem } from '@/types';
-import { Users, ShieldQuestion, Ticket } from 'lucide-react';
+import { Users, ShieldQuestion, Ticket, BellPlus } from 'lucide-react';
 
 import user from '@/routes/manager/user';
 import role from '@/routes/manager/role';
 import ticket from '@/routes/manager/ticket';
+import notification from '@/routes/manager/notification';
 const mainNavItems: NavItem[] = [
     {
         title: 'Users',
@@ -34,6 +35,11 @@ const mainNavItems: NavItem[] = [
         title: 'Tickets',
         href: ticket.index(),
         icon: Ticket,
+    },
+    {
+        title: 'Notification',
+        href: notification.index(),
+        icon: BellPlus,
     },
 
 ];
