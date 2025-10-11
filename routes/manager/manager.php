@@ -28,3 +28,9 @@ Route::prefix('role')->name('role.')->group(function () {
     Route::put('/{role}', [\App\Http\Controllers\Manager\RoleController::class, 'update'])->name('update');
     Route::delete('/{role}', [\App\Http\Controllers\Manager\RoleController::class, 'destroy'])->name('destroy');
 });
+
+
+Route::prefix('ticket')->as('ticket.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Manager\TicketController::class, 'index'])->name('index');
+    Route::get('/show/{ticket}', [\App\Http\Controllers\Manager\TicketController::class, 'show'])->name('show');
+});
