@@ -49,9 +49,13 @@ import {
 
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5/translations/fa.umd';
+interface CkEditorProps {
+    value: string;
+    onChange: (data: string) => void;
+}
 
+export default function CkEditor({ value, onChange }: CkEditorProps) {
 
-export default function CkEditor() {
     // const uploadMutation = useMutation({
     //     mutationFn: async (file) => {
     //         const data = new FormData();
@@ -103,6 +107,11 @@ export default function CkEditor() {
         <div className={`my-2`}>
             <CKEditor
                 editor={ClassicEditor}
+                data={value}
+                onChange={(_, editor) => {
+                    const data = editor.getData();
+                    onChange(data);
+                }}
                 config={{
                     licenseKey: 'GPL',
                     language: {

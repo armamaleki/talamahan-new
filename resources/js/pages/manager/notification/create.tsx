@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, useForm } from '@inertiajs/react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ManagerLayout from '@/layouts/manager-layout';
 import { Label } from '@/components/ui/label';
@@ -8,12 +8,23 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import notification from '@/routes/manager/notification';
 import CkEditor from '@/components/ui/CkEditor';
+
 const breadcrumbs = [
     { title: 'Manager', href: '/manager' },
     { title: 'Users', href: '/manager/notification' },
     { title: 'Create', href: '' },
 ];
 export default function storeNotification() {
+    const { data, setData, post } = useForm({
+        title: '',
+        message: '',
+    });
+
+    // const handleSubmit = () => {
+    //     console.log('dddddd');
+    //     post(notification.store());
+    // };
+
     return (
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Head title="create notification" />
@@ -24,7 +35,8 @@ export default function storeNotification() {
                         method="post"
                         action={notification.store()}
                         resetOnSuccess={['title']}
-                        className="flex flex-col gap-6">
+                        className="flex flex-col gap-6"
+                    >
                         {({ processing, errors }) => (
                             <div className="grid gap-4">
                                 <div>
@@ -39,17 +51,22 @@ export default function storeNotification() {
                                 </div>
                                 <div>
                                     <Label htmlFor="message">Message</Label>
-                                    <CkEditor />
+                                    <CkEditor
+                                        value={data.message}
+                                        onChange={(value) =>
+                                            setData('message', value)
+                                        }
+                                    />
                                     <InputError message={errors.message} />
                                 </div>
                                 <Button
                                     type="submit"
-                                    className="w-full mt-2"
+                                    className="mt-2 w-full"
                                     disabled={processing}
                                 >
                                     {processing ? (
                                         <>
-                                            <LoaderCircle className="h-4 w-4 animate-spin mr-2" />
+                                            <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                                             Sending...
                                         </>
                                     ) : (
@@ -57,7 +74,6 @@ export default function storeNotification() {
                                     )}
                                 </Button>
                             </div>
-
                         )}
                     </Form>
                 </CardContent>

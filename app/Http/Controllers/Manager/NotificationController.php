@@ -7,9 +7,9 @@ use App\Http\Requests\Manager\Notification\StoreNotificationRequest;
 use App\Http\Resources\Manager\Notification\NotificationCollection;
 use App\Models\AppNotification;
 use App\Models\User;
-use http\Env\Request;
-use App\Notifications\AppNotification as Notification;
+use App\Notifications\AppNotification as NOTIC;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
@@ -17,7 +17,7 @@ class NotificationController extends Controller
     {
         $notifications = AppNotification::paginate(10);
         return Inertia::render('manager/notification/index', [
-            'notifications' => new NotificationCollection($notifications),
+            'notificationsList' => new NotificationCollection($notifications),
         ]);
     }
 
@@ -29,13 +29,14 @@ class NotificationController extends Controller
     public function store(StoreNotificationRequest $request)
     {
         $title = $request->input('title');
-        $message = $request->input('message');
+//        $message = $request->input('message');
+        $message='sds';
 //        $extra = $request->input('data', []);
         $users = User::all();
         foreach (array_chunk($users->all(), 20) as $key => $userGroup) {
-            foreach ($users as $user) {
+            foreach ($userGroup as $user) {
                 $user->notify(
-                    (new Notification($title, $message))
+                    (new NOTIC($title, $message))
                         ->delay(now()->addSeconds($key * 60))
                 );
             }

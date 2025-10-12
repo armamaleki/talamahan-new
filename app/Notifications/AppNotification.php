@@ -57,7 +57,7 @@ class AppNotification extends Notification implements ShouldQueue
             'user_id' => $notifiable->id,
             'title' => $this->title,
             'message' => $this->message,
-            'type' => 'database',
+            'type' => 'database|email|broadcast',
             'data' => $this->extraData,
             'sent_at' => now(),
         ]);

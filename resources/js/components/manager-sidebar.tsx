@@ -14,12 +14,20 @@ import AppLogo from '@/components/app-logo';
 import manager from '@/routes/manager';
 import { NavMain } from '@/components/nav-main';
 import type { NavItem } from '@/types';
-import { Users, ShieldQuestion, Ticket, BellPlus } from 'lucide-react';
+import {
+    Users,
+    ShieldQuestion,
+    Ticket,
+    BellPlus,
+    Telescope,
+    HeartPulse,
+} from 'lucide-react';
 
 import user from '@/routes/manager/user';
 import role from '@/routes/manager/role';
 import ticket from '@/routes/manager/ticket';
 import notification from '@/routes/manager/notification';
+import { pulse, telescope } from '@/routes';
 const mainNavItems: NavItem[] = [
     {
         title: 'Users',
@@ -40,6 +48,16 @@ const mainNavItems: NavItem[] = [
         title: 'Notification',
         href: notification.index(),
         icon: BellPlus,
+    },
+    {
+        title: 'Telescope',
+        href: telescope(),
+        icon: Telescope,
+    },
+    {
+        title: 'Pulse',
+        href: pulse(),
+        icon: HeartPulse,
     },
 
 ];
