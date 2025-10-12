@@ -16,6 +16,8 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         Route::get('/{ticket}', [\App\Http\Controllers\Dashboard\TicketController::class, 'show'])->name('show');
     });
 
+    Route::get('notifications', [\App\Http\Controllers\Dashboard\NotificationController::class, 'index'])->name('notifications.index');
+
     Route::get('/privacy-policy' , function (){
         return Inertia::render('dashboard/privacy-policy');
     })->name('privacy-policy');

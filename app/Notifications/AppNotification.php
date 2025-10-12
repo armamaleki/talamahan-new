@@ -3,11 +3,13 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AppNotification extends Notification implements ShouldQueue
+class AppNotification extends Notification implements ShouldQueue , ShouldBroadcast
 {
     use Queueable;
     public $title;
@@ -31,7 +33,7 @@ class AppNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail' , 'database'];
+        return ['mail' , 'database' , 'broadcast'];
     }
 
     /**
@@ -66,6 +68,20 @@ class AppNotification extends Notification implements ShouldQueue
             'message' => $this->message,
             'data' => $this->extraData,
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'title' => $this->title,
+            'message' => $this->message,
+            'data' => $this->extraData,
+        ]);
+    }
+
+    public function broadcastOn()
+    {
+        return new \Illuminate\Broadcasting\Channel('test-channel');
     }
     public function toArray(object $notifiable): array
     {

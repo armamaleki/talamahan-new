@@ -13,9 +13,18 @@ import {
 import { dashboard, privacyPolicy, training } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Mail, ShieldCheck , GraduationCap } from 'lucide-react';
+import {
+    BookOpen,
+    Folder,
+    LayoutGrid,
+    Mail,
+    ShieldCheck,
+    GraduationCap,
+    BellElectric,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 import tickets from '@/routes/tickets';
+import notifications from '@/routes/notifications';
 
 const mainNavItems: NavItem[] = [
     {
@@ -37,6 +46,11 @@ const mainNavItems: NavItem[] = [
         title: 'Training',
         href: training(),
         icon: GraduationCap,
+    },
+    {
+        title: 'Notifications',
+        href: notifications.index(),
+        icon: BellElectric,
     },
 ];
 
