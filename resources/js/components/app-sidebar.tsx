@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, privacyPolicy, training } from '@/routes';
+import { dashboard, portfo, privacyPolicy, training } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
@@ -50,6 +50,11 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Notifications',
         href: notifications.index(),
+        icon: BellElectric,
+    },
+    {
+        title: 'Portfo',
+        href: portfo(),
         icon: BellElectric,
     },
 ];
