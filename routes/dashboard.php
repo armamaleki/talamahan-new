@@ -26,7 +26,8 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         return Inertia::render('dashboard/training');
     })->name('training');
 
-    Route::get('/portfo' , function (){
-        return Inertia::render('dashboard/portfo');
-    })->name('portfo');
+
+
+    Route::get('/trade' ,[\App\Http\Controllers\Dashboard\TradeController::class , 'index'])->name('trade');
+
 });

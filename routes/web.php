@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\User;
+use App\Events\TestEvent;
+use App\Events\Trade;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,17 +16,13 @@ require __DIR__ . '/dashboard.php';
 
 Route::prefix('manager')
     ->name('manager.')
-    ->middleware(['auth', 'verified' , 'permission:show-admin-panel'])
+    ->middleware(['auth', 'verified', 'permission:show-admin-panel'])
     ->group(function () {
         require __DIR__ . '/manager/manager.php';
     });
 
-Route::get('test-notic', function () {
-    $user = User::find(1);
 
-    $user->notify(new \App\Notifications\AppNotification(
-        'اعلان جدید',
-        'سفارش جدیدی ثبت شده است.',
-        ['ssssssss' => 'sssssssssssssssssssssssssssssssssss']
-    ));
+
+Route::get('test', function () {
+    Trade::dispatch();
 });

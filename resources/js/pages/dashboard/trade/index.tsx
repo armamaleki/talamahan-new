@@ -6,13 +6,18 @@ import { Head } from '@inertiajs/react';
 import { CandlestickSeries, createChart } from 'lightweight-charts';
 import { useEffect, useRef } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useEcho } from "@laravel/echo-react";
+import { useEchoPresence } from "@laravel/echo-react";
+
+
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
-    { title: 'Portfo', href: '#' },
+    { title: 'Index', href: '#' },
 ];
 
-export default function Portfo() {
+export default function Index() {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const chartRef = useRef<any>(null);
     const seriesRef = useRef<any>(null);
@@ -61,9 +66,21 @@ export default function Portfo() {
         };
     }, []);
 
+    // useEcho(
+    //     `trade-lobby`,
+    //     "Trade",
+    //     () => {
+    //         console.log('e.order');
+    //     },
+    // );
+
+    useEchoPresence("trade-lobby", "Trade", () => {
+        console.log('e.post');
+    });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
+            <Head title="Trade" />
             <h3 className="mb-3 text-lg font-medium">نمونه چارت (دیتا فیک)</h3>
             <Card className={'bg-gray-800'}>
                 <CardContent>

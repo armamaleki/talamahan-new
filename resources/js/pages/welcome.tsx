@@ -1,10 +1,18 @@
 import { dashboard, login, register } from '@/routes';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useEchoPublic } from "@laravel/echo-react";
+
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
-
+    useEchoPublic(
+        `test`,
+        "TestEvent",
+        () => {
+            console.log('asacasc');
+        },
+    );
     return (
         <>
             <Head title="Welcome">

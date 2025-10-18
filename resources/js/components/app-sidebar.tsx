@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, portfo, privacyPolicy, training } from '@/routes';
+import { dashboard, portfo, privacyPolicy, trade, training } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
@@ -21,6 +21,7 @@ import {
     ShieldCheck,
     GraduationCap,
     BellElectric,
+    ChartCandlestick,
 } from 'lucide-react';
 import AppLogo from './app-logo';
 import tickets from '@/routes/tickets';
@@ -53,9 +54,9 @@ const mainNavItems: NavItem[] = [
         icon: BellElectric,
     },
     {
-        title: 'Portfo',
-        href: portfo(),
-        icon: BellElectric,
+        title: 'Trade',
+        href: trade(),
+        icon: ChartCandlestick,
     },
 ];
 
