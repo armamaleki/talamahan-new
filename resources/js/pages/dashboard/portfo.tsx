@@ -181,6 +181,10 @@ export default function Portfo() {
                     </div>
                 </CardContent>
             </Card>
+            کم ترین عدد پورتفو 2300
+            بیشترین عدد پورتفو 23 ملیون
+
+
         </AppLayout>
     );
 }
