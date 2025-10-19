@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class Trade implements ShouldBroadcast
+class GoldTradeLobby implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -30,7 +30,7 @@ class Trade implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('trade-lobby'),
+            new PrivateChannel('gold-trade-lobby'),
         ];
     }
 }

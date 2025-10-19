@@ -13,9 +13,13 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 //    return ['name' => $user->name];
 //});
 
-Broadcast::channel('trade-lobby', function ($user) {
+Broadcast::channel('gold-trade-lobby', function ($user) {
     return [
         'id' => $user->id,
         'name' => $user->name,
     ] ;
+});
+
+Broadcast::channel('chart-price-channel', function () {
+    return auth()->check();
 });

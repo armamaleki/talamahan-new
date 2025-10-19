@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-                ->constrained()
+                ->constrained('user')
                 ->onDelete('cascade');
             $table->string('symbol', 10); //USD, USDT, IRR, BTC
             $table->string('name')->nullable();
             $table->decimal('balance', 20, 8)->default(0);
-            $table->timestamps();
-
             $table->unique(['user_id', 'name']);
             $table->timestamps();
         });

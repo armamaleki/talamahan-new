@@ -3,99 +3,82 @@ import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { CandlestickSeries, createChart } from 'lightweight-charts';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useEcho } from "@laravel/echo-react";
-import { useEchoPresence } from "@laravel/echo-react";
-
-
-
+import { useEchoPresence } from '@laravel/echo-react';
+import TradingViewChart from '@/components/trading-view-chart';
+import CreatePortfolio from '@/components/create-portfolio';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
     { title: 'Index', href: '#' },
 ];
 
-export default function Index() {
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    const chartRef = useRef<any>(null);
-    const seriesRef = useRef<any>(null);
-
-    const fakeData = [
-        { time: '2025-10-06', open: 100, high: 110, low: 95, close: 105 },
-        { time: '2025-10-07', open: 105, high: 115, low: 100, close: 110 },
-        { time: '2025-10-08', open: 110, high: 120, low: 108, close: 115 },
-        { time: '2025-10-09', open: 115, high: 118, low: 112, close: 114 },
-        { time: '2025-10-10', open: 114, high: 125, low: 113, close: 122 },
-    ];
-
+export default function TradePage({ pricesList , AmountOfMoneyInTheWallet }) {
+    const [users, setUsers] = useState([]);
+    const [onlineUsers, setOnlineUsers] = useState(0);
+    const { channel, listen, stopListening, leaveChannel } = useEchoPresence(
+        'gold-trade-lobby',
+        'GoldTradeLobby',
+    );
     useEffect(() => {
-        if (!containerRef.current) return;
+        const ch = channel();
 
-        // create chart with proper crosshair mode
+        if (!ch) return;
 
-        const chart = createChart(containerRef.current, {
-            width: containerRef.current.clientWidth,
-            height: 420,
-            layout: { backgroundColor: '#ffffff', textColor: '#333' },
-            grid: {
-                vertLines: { visible: false },
-                horzLines: { color: '#eee' },
-            },
-            timeScale: { timeVisible: true, secondsVisible: false },
+        ch.here((members) => {
+            console.log('اعضای فعلی:', members);
+            // setUsers(members);
+            setOnlineUsers(members.length);
         });
 
-        const candleSeries = chart.addSeries(CandlestickSeries);
+        ch.joining((user) => {
+            // console.log("کاربر جدید:", user);
+            setUsers((prev) => [...prev, user]);
 
-        candleSeries.setData(fakeData);
-
-        chartRef.current = chart;
-        seriesRef.current = candleSeries;
-
-        const ro = new ResizeObserver(() => {
-            chart.applyOptions({ width: containerRef.current!.clientWidth });
+            setOnlineUsers((prev) => prev + 1);
         });
-        ro.observe(containerRef.current);
+
+        ch.leaving((user) => {
+            // console.log("کاربر خارج شد:", user);
+            setUsers((prev) => prev.filter((u) => u.id !== user.id));
+
+            setOnlineUsers((prev) => Math.max(prev - 1, 0));
+        });
+        listen();
 
         return () => {
-            ro.disconnect();
-            chart.remove();
-            chartRef.current = null;
-            seriesRef.current = null;
+            stopListening();
+            leaveChannel();
         };
     }, []);
-
-    // useEcho(
-    //     `trade-lobby`,
-    //     "Trade",
-    //     () => {
-    //         console.log('e.order');
-    //     },
-    // );
-
-    useEchoPresence("trade-lobby", "Trade", () => {
-        console.log('e.post');
-    });
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Trade" />
-            <h3 className="mb-3 text-lg font-medium">نمونه چارت (دیتا فیک)</h3>
+            <div className="mb-3 flex items-start gap-2 text-lg font-medium">
+                <span className="relative flex size-3">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+                    <span className="relative inline-flex size-3 rounded-full bg-sky-500"></span>
+                </span>
+                <span className={`text-2xl`}>Online users {onlineUsers}</span>
+            </div>
+            <ul>
+                {users.map((u) => (
+                    <li key={u.id}>{u.name}</li>
+                ))}
+            </ul>
             <Card className={'bg-gray-800'}>
                 <CardContent>
                     <div
                         className={`grid grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-6`}
                     >
-                        <div className="col-span-1 lg:col-span-2">
-                            <div className={`p-2 text-center`}>
-                                <p>قبل از انجام معامله باید پورتفو بسازید</p>
-                                <button>ساخت پورتفو </button>
-                            </div>
+                        <div className="col-span-1 lg:col-span-2 space-y-1" >
+                            <CreatePortfolio ammount={AmountOfMoneyInTheWallet} />
                             <div className={`grid grid-cols-6 gap-2`}>
                                 <div
-                                    className={`col-span-2 rounded-md border border-gray-600`}>
-                                    <div className="text-center text-red-500 h-50 overflow-auto">
+                                    className={`col-span-2 rounded-md border border-gray-600`}
+                                >
+                                    <div className="h-50 overflow-auto text-center text-red-500">
                                         <p>۴۷٬۹۲۹ - ۱</p>
                                         <p>۴۷٬۹۳۵ - ۲</p>
                                         <p>۴۷٬۹۴۱ - ۱</p>
@@ -111,11 +94,11 @@ export default function Index() {
                                         <p>۴۸٬۰۳۵ - ۱</p>
                                         <p>۴۸٬۰۴۷ - ۱</p>
                                     </div>
-                                    <div className="w-full flex justify-center items-center p-2 bg-fuchsia-400">
+                                    <div className="flex w-full items-center justify-center bg-fuchsia-400 p-2">
                                         <p>۴۷٬۹۴۳</p>
                                         <p>:مظنه</p>
                                     </div>
-                                    <div className="text-center text-green-500 h-50 overflow-auto">
+                                    <div className="h-50 overflow-auto text-center text-green-500">
                                         <p>۴۷٬۹۲۹ - ۱</p>
                                         <p>۴۷٬۹۳۵ - ۲</p>
                                         <p>۴۷٬۹۴۱ - ۱</p>
@@ -133,11 +116,19 @@ export default function Index() {
                                     </div>
                                 </div>
                                 <div
-                                    className={`col-span-4 rounded-md border border-gray-600 p-2`}>
-                                    <Tabs defaultValue="account" className="w-[400px]">
+                                    className={`col-span-4 rounded-md border border-gray-600 p-2`}
+                                >
+                                    <Tabs
+                                        defaultValue="account"
+                                        className="w-[400px]"
+                                    >
                                         <TabsList>
-                                            <TabsTrigger value="account">اوردر</TabsTrigger>
-                                            <TabsTrigger value="password">لفظ</TabsTrigger>
+                                            <TabsTrigger value="account">
+                                                اوردر
+                                            </TabsTrigger>
+                                            <TabsTrigger value="password">
+                                                لفظ
+                                            </TabsTrigger>
                                         </TabsList>
                                         <TabsContent value="account">
                                             Make changes to your account here.
@@ -149,11 +140,20 @@ export default function Index() {
                                 </div>
                             </div>
                             <div>
-                                <Tabs defaultValue="account" className="w-[400px]">
+                                <Tabs
+                                    defaultValue="account"
+                                    className="w-[400px]"
+                                >
                                     <TabsList>
-                                        <TabsTrigger value="account">لفط های من</TabsTrigger>
-                                        <TabsTrigger value="password">معاملات باز</TabsTrigger>
-                                        <TabsTrigger value="order">معاملات بسته شده</TabsTrigger>
+                                        <TabsTrigger value="account">
+                                            لفط های من
+                                        </TabsTrigger>
+                                        <TabsTrigger value="password">
+                                            معاملات باز
+                                        </TabsTrigger>
+                                        <TabsTrigger value="order">
+                                            معاملات بسته شده
+                                        </TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="account">
                                         Make changes to your account here.
@@ -190,18 +190,12 @@ export default function Index() {
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                ref={containerRef}
-                                style={{ width: '100%', height: 420 }}
-                            />
+                            <TradingViewChart pricesList={pricesList} />
                         </div>
                     </div>
                 </CardContent>
             </Card>
-            کم ترین عدد پورتفو 2300
-            بیشترین عدد پورتفو 23 ملیون
-
-
+            کم ترین عدد پورتفو 2300 بیشترین عدد پورتفو 23 ملیون
         </AppLayout>
     );
 }
