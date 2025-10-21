@@ -73,7 +73,7 @@ export default function TradePage({ pricesList , AmountOfMoneyInTheWallet }) {
                         className={`grid grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-6`}
                     >
                         <div className="col-span-1 lg:col-span-2 space-y-1" >
-                            <CreatePortfolio ammount={AmountOfMoneyInTheWallet} />
+                            <CreatePortfolio walletBalance={AmountOfMoneyInTheWallet} />
                             <div className={`grid grid-cols-6 gap-2`}>
                                 <div
                                     className={`col-span-2 rounded-md border border-gray-600`}

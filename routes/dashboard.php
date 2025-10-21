@@ -30,4 +30,8 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
 
     Route::get('/trade' ,[\App\Http\Controllers\Dashboard\TradeController::class , 'index'])->name('trade');
 
+    Route::prefix('wallets')->name('wallets.')->group(function () {
+        Route::get('/' ,[\App\Http\Controllers\Dashboard\WalletController::class , 'index'])->name('index');
+    });
+
 });

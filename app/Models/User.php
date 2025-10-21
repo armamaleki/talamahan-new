@@ -32,6 +32,11 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope('latest', function ($query) {

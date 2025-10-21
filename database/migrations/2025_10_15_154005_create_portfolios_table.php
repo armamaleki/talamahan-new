@@ -16,11 +16,10 @@ return new class extends Migration {
                 ->nullable()
                 ->constrained('user')
                 ->onDelete('cascade');
-            $table->integer('amount')->nullable();// مبلغی که از کیف پول برداشته میشه
+            $table->bigInteger('amount')->nullable();// مبلغی که از کیف پول برداشته میشه
             $table->integer('lever')->nullable();// تعداد خط معامله که الان 100 تاست هر خط 23,000 تومن
-            $table->integer('unit_purchase')->nullable();// واحد خرید
-            $table->integer('unit_sales')->nullable();// واحد فروش
-            $table->enum('type' , ['a' , 'b'])->default('a');
+            $table->bigInteger('result')->nullable();// نتیجه معامله توش ریخته میشه وقتی پورتفو بسته میشه
+            $table->enum('type' , ['cross' , 'isolated'])->default('a');
             $table->enum('status' , ['open' , 'close' , 'wait'])->default('open');
             $table->timestamps();
         });

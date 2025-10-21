@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Wallet;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -39,6 +39,10 @@ class PermissionTableAndSuperUserSeeder extends Seeder
             'name' => 'arma',
             'email' => 'arma.malekii@gmail.com',
             'password' => bcrypt('Amra#1375')
+        ]);
+        Wallet::create([
+            'user_id' => $user->id,
+            'balance' => 0, // موجودی اولیه صفر
         ]);
         $adminRole = Role::create(['name' => 'Admin']);
         $userRole = Role::create(['name' => 'User']);

@@ -9,4 +9,13 @@ class Portfolio extends Model
 {
     /** @use HasFactory<\Database\Factories\PortfolioFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'amount',
+        'lever',
+        'result',
+        'type',
+        'status',
+    ];
 }

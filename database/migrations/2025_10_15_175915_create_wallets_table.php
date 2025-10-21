@@ -16,10 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->constrained('user')
                 ->onDelete('cascade');
-            $table->string('symbol', 10); //USD, USDT, IRR, BTC
+            $table->string('symbol', 10)->default('IRR'); //USD, USDT, IRR, BTC
             $table->string('name')->nullable();
-            $table->decimal('balance', 20, 8)->default(0);
-            $table->unique(['user_id', 'name']);
+            $table->bigInteger('balance')->default(0);
             $table->timestamps();
         });
     }
