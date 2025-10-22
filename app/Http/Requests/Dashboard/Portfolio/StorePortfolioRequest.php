@@ -23,7 +23,6 @@ class StorePortfolioRequest extends FormRequest
     {
         return [
             'amount'=>'required|numeric|min:2300000|max:23000000',
-            'type'=>'required|in:cross,isolated',
         ];
     }
 }

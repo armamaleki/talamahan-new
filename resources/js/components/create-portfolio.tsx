@@ -16,10 +16,11 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import InputError from '@/components/input-error';
 import { useState } from 'react';
+import portfolios from '@/routes/portfolios';
 
 export default function CreatePortfolio({ walletBalance }) {
     const [result, setResult] = useState(''); // تعداد یونیت‌ها
@@ -61,9 +62,10 @@ export default function CreatePortfolio({ walletBalance }) {
             setLocalErrors(newErrors);
             return;
         }
+        post(portfolios.store(data))
 
         // post(route('manager.portfolio.store'), { onSuccess: () => reset() })
-        console.log('ارسال داده:', data);
+        // console.log('ارسال داده:', data);
     };
 
     return (

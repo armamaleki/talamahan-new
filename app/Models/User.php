@@ -37,6 +37,11 @@ class User extends Authenticatable
         return $this->hasOne(Wallet::class);
     }
 
+    public function portfolios()
+    {
+        return $this->hasMany(Portfolio::class);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope('latest', function ($query) {
