@@ -15,16 +15,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { router, useForm } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
+
 import InputError from '@/components/input-error';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import portfolios from '@/routes/portfolios';
+import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function CreatePortfolio({ walletBalance }) {
     const [result, setResult] = useState(''); // تعداد یونیت‌ها
     const [localErrors, setLocalErrors] = useState({}); // ارورهای سمت کلاینت
+    const [open, setOpen] = useState(false);
     const newErrors: Record<string, string> = {};
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -62,18 +65,36 @@ export default function CreatePortfolio({ walletBalance }) {
             setLocalErrors(newErrors);
             return;
         }
-        post(portfolios.store(data))
-
-        // post(route('manager.portfolio.store'), { onSuccess: () => reset() })
-        // console.log('ارسال داده:', data);
+        post(portfolios.store(data) , {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('پورتفو با موفقیت ساخته شد 🎉');
+                reset();
+                setResult(''); // ✅ ریست تعداد واحد
+                setLocalErrors({}); // ✅ پاک کردن ارورهای محلی
+                setOpen(false); // ✅ بستن دیالوگ بعد از موفقیت
+            },
+            onError: (errors) => {
+                if (errors.balance) toast.error(errors.balance);
+                if (errors.portfolio) toast.error(errors.portfolio);
+                if (errors.wallet) toast.error(errors.wallet);
+                setLocalErrors(errors);
+            },
+        });
     };
 
     return (
         <div className="space-y-2 rounded-md border border-gray-600 p-2 text-center">
+            <ToastContainer />
             <p>قبل از انجام معامله باید پورتفو بسازید</p>
-            <AlertDialog>
-                <AlertDialogTrigger>
-                    <p className="rounded-md bg-red-400 p-2">ساخت پورتفو</p>
+            <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogTrigger asChild>
+                    <Button
+                        variant="destructive"
+                        className="w-full"
+                        onClick={() => setOpen(true)} >
+                        ساخت پورتفو
+                    </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -149,7 +170,7 @@ export default function CreatePortfolio({ walletBalance }) {
                     </AlertDialogHeader>
 
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel onClick={() => setOpen(false)} >Cancel</AlertDialogCancel>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

@@ -15,12 +15,14 @@ class TradeController extends Controller
 //        قوانین ورود به صفحه ترید
 //     TODO اینو از پهلوان بگیر
 //        TODO ساعت کاری بازار رو درست کن
+//        TODO دقت کن که باید فقط معاملات امروز رو چک کنی (ساعت کاری بازار رو بپرس از پهلوان ____ اگه بگه  ;))
         $pricesList = GoldPrice::latest('time')->get()->reverse()->values();
         $AmountOfMoneyInTheWallet = auth()->user()->wallet->balance ?? 0;
-//        dd($AmountOfMoneyInTheWallet);
+        $portfolio = auth()->user()->portfolios()->where('status' , 'open')->latest()->first();
         return Inertia::render('dashboard/trade/index' , [
             'pricesList' => new GoldPriceCollection($pricesList),
             'AmountOfMoneyInTheWallet' => $AmountOfMoneyInTheWallet,
+            'portfolioItem' => $portfolio,
         ]);
     }
 }

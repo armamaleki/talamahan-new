@@ -24,5 +24,6 @@ Route::prefix('manager')
 
 
 Route::get('test', function () {
-    Trade::dispatch();
+    event(new \App\Events\GoldTradeLobby('معامله جدید ثبت شد ✅'));
+
 });

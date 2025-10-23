@@ -17,7 +17,7 @@ class GoldTradeLobby implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct(public $message)
     {
         //
     }
@@ -30,7 +30,13 @@ class GoldTradeLobby implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('gold-trade-lobby'),
+            new PresenceChannel('gold-trade-lobby'),
         ];
     }
+
+    public function broadcastAs(): string
+    {
+        return 'gold-trade.notification';
+    }
+
 }
