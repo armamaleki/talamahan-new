@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, privacyPolicy, trade, training} from '@/routes';
+import { dashboard, privacyPolicy, referral, trade, training } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
@@ -23,6 +23,7 @@ import {
     BellElectric,
     ChartCandlestick,
     Wallet,
+    UsersRound,
 } from 'lucide-react';
 import AppLogo from './app-logo';
 import tickets from '@/routes/tickets';
@@ -59,6 +60,11 @@ const mainNavItems: NavItem[] = [
         title: 'Wallet',
         href: wallets.index(),
         icon: Wallet,
+    },
+    {
+        title: 'Referral',
+        href: referral(),
+        icon: UsersRound,
     },
     {
         title: 'Trade',

@@ -36,4 +36,12 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         Route::get('/' ,[\App\Http\Controllers\Dashboard\WalletController::class , 'index'])->name('index');
     });
 
+
+    Route::get('/referral' , function (){
+        $ref = auth()->user()->referral_code;
+        return Inertia::render('dashboard/referral' , [
+            'ref' => $ref,
+        ]);
+    })->name('referral');
+
 });

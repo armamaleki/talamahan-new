@@ -38,6 +38,7 @@ class PermissionTableAndSuperUserSeeder extends Seeder
         $user = User::create([
             'name' => 'arma',
             'email' => 'arma.malekii@gmail.com',
+            'referral_code' => 'arma',
             'password' => bcrypt('Amra#1375')
         ]);
         Wallet::create([
