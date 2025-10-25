@@ -9,14 +9,19 @@ import { useEchoPresence } from '@laravel/echo-react';
 import TradingViewChart from '@/components/trading-view-chart';
 import CreatePortfolio from '@/components/create-portfolio';
 import OrderContainer from '@/components/order-container';
-import { toast, ToastContainer } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
     { title: 'Index', href: '#' },
 ];
 
-export default function TradePage({ pricesList , AmountOfMoneyInTheWallet , portfolioItem}) {
+export default function TradePage({
+    pricesList,
+    AmountOfMoneyInTheWallet,
+    portfolioItem,
+}) {
     const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const { channel, listen, stopListening, leaveChannel } = useEchoPresence(
@@ -47,10 +52,18 @@ export default function TradePage({ pricesList , AmountOfMoneyInTheWallet , port
 
             setOnlineUsers((prev) => Math.max(prev - 1, 0));
         });
-        ch.listen('.gold-trade.notification', (e) => {
-            toast(e.message);
+        ch.listen('.gold-trade.notification', (data) => {
+            withReactContent(Swal).fire({
+                title: data.data.title,
+                icon: data.data.icon,
+                text: data.data.message,
+                footer: data.data.footer,
+                theme: 'auto',
+                backdrop: `rgba(0,0,123,0.4) url("/assets/images/giphy.gif") left top no-repeat `,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
         });
-
 
 
         return () => {
@@ -60,7 +73,6 @@ export default function TradePage({ pricesList , AmountOfMoneyInTheWallet , port
     }, []);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <ToastContainer />
             <Head title="Trade" />
             <div className="mb-3 flex items-start gap-2 text-lg font-medium">
                 <span className="relative flex size-3">
@@ -77,15 +89,18 @@ export default function TradePage({ pricesList , AmountOfMoneyInTheWallet , port
             <Card className={'bg-gray-800'}>
                 <CardContent>
                     <div
-                        className={`grid grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-6`}>
-                        <div className="col-span-1 lg:col-span-2 space-y-1" >
-                            {portfolioItem ?
+                        className={`grid grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-6`}
+                    >
+                        <div className="col-span-1 space-y-1 lg:col-span-2">
+                            {portfolioItem ? (
                                 portfolioItem.amount
-                                :
-                                <CreatePortfolio walletBalance={AmountOfMoneyInTheWallet} />
-                            }
+                            ) : (
+                                <CreatePortfolio
+                                    walletBalance={AmountOfMoneyInTheWallet}
+                                />
+                            )}
                             <div className={`grid grid-cols-6 gap-2`}>
-                                <OrderContainer/>
+                                <OrderContainer />
                             </div>
                             <div>
                                 <Tabs

@@ -17,7 +17,7 @@ class GoldTradeLobby implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public $message)
+    public function __construct(public $data)
     {
         //
     }

@@ -20,10 +20,3 @@ Route::prefix('manager')
     ->group(function () {
         require __DIR__ . '/manager/manager.php';
     });
-
-
-
-Route::get('test', function () {
-    event(new \App\Events\GoldTradeLobby('معامله جدید ثبت شد ✅'));
-
-});

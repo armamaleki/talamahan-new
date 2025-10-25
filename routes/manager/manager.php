@@ -39,4 +39,6 @@ Route::prefix('notification')->as('notification.')->group(function () {
    Route::get('/', [\App\Http\Controllers\Manager\NotificationController::class, 'index'])->name('index');
    Route::get('/create', [\App\Http\Controllers\Manager\NotificationController::class, 'create'])->name('create');
    Route::post('/store', [\App\Http\Controllers\Manager\NotificationController::class, 'store'])->name('store');
+   Route::get('live-notification', [\App\Http\Controllers\Manager\LiveNotificationController::class, 'index'])->name('live-notification');
+   Route::post('live-notification/store', [\App\Http\Controllers\Manager\LiveNotificationController::class, 'store'])->name('live-notification.store');
 });

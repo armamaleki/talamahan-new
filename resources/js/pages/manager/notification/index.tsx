@@ -48,6 +48,12 @@ export default function NotificationLists({
                             Create a new notification
                         </Link>
                     </Button>
+                    <Button className={'w-fit'} size={'lg'} asChild>
+                        <Link href={notification.liveNotification()}>
+                            <Plus />
+                            Create a new live notification
+                        </Link>
+                    </Button>
                 </CardHeader>
                 <CardContent>
                     <Table>
