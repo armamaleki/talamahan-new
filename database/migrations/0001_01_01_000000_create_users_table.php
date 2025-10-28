@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('referral_code', 20)->unique();
+            $table->string('referral_code', 20)->nullable()->unique();
             $table->foreignId('referred_by')->nullable()->constrained('user')->nullOnDelete();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

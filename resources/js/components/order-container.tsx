@@ -2,8 +2,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { useForm } from '@inertiajs/react';
+import InputError from '@/components/input-error';
 
 export default function OrderContainer() {
+
+    const { data, setData, post, processing, errors } = useForm({
+        amount: '',
+        fee: '',
+        tp: '',
+        sl: '',
+        type: '', // مثلاً buy یا sell
+    });
+    const newErrors: Record<string, string> = {};
+
+    const handleSubmit = (type) => (e) => {
+        e.preventDefault();
+        if (!data.amount) newErrors.amount = 'مبلغ الزامیه';
+        console.log(data.amount);
+        setData('type', type);
+        // post(route('orders.store'));
+    };
     return (
         <>
             <div className={`col-span-2 rounded-md border border-gray-600`}>
@@ -45,8 +65,7 @@ export default function OrderContainer() {
                 </div>
             </div>
             <div
-                className={`col-span-4 w-fit rounded-md border border-gray-600 p-2`}
-            >
+                className={`col-span-4 w-fit rounded-md border border-gray-600 p-2`}>
                 <Tabs defaultValue="order" className="w-[400px]">
                     <TabsList>
                         <TabsTrigger value="order">اوردر</TabsTrigger>
@@ -54,15 +73,50 @@ export default function OrderContainer() {
                     </TabsList>
                     <TabsContent value="order">
                         <Card className={'p-2 space-y-4'}>
-                            <form className={'space-y-4'}>
-                               <Input type={'text'} placeholder={'حجم'} ></Input>
-                               <Input type={'text'} placeholder={'قیمت '} ></Input>
-                               <Input type={'text'} placeholder={'حد سود'} ></Input>
-                               <Input type={'text'} placeholder={'حد زرر'} ></Input>
-                                {/*<ButtonGroup>*/}
-                                    <Button>Button 1</Button>
-                                    <Button>Button 2</Button>
-                                {/*</ButtonGroup>*/}
+                            <form
+                                className={'space-y-4'}>
+                               <Input
+                                   name="amount"
+                                   type="text"
+                                   placeholder="حجم"
+                                   value={data.amount}
+                                   onChange={(e) => setData('amount', e.target.value)}/>
+                                <InputError
+                                    message={errors.amount}
+                                />
+                               <Input
+                                   name="fee"
+                                   type="text"
+                                   placeholder="قیمت"
+                                   value={data.fee}
+                                   onChange={(e) => setData('fee', e.target.value)}
+                               />
+                               <Input
+                                   name="tp"
+                                   type="text"
+                                   placeholder="حد سود"
+                                   value={data.tp}
+                                   onChange={(e) => setData('tp', e.target.value)}
+                               />
+                               <Input
+                                   name="sl"
+                                   type="text"
+                                   placeholder="حد ضرر"
+                                   value={data.sl}
+                                   onChange={(e) => setData('sl', e.target.value)}
+                               />
+                                <ButtonGroup>
+                                    <Button
+                                        onClick={handleSubmit('buy')}
+                                        disabled={processing}
+                                        className={'bg-green-500 w-full'}
+                                        type={'submit'}>خرید</Button>
+                                    <Button
+                                        className={'bg-red-500'}
+                                        onClick={handleSubmit('sell')}
+                                        disabled={processing}
+                                        type={'submit'}>فروش</Button>
+                                </ButtonGroup>
                             </form>
                         </Card>
                     </TabsContent>

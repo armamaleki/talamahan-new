@@ -32,8 +32,6 @@ export default function CreatePortfolio({ walletBalance }) {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         amount: '',
-        type: '',
-        unite: '',
     });
 
     const handlePriceChange = (e) => {
@@ -52,9 +50,6 @@ export default function CreatePortfolio({ walletBalance }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLocalErrors({});
-
-        if (!data.type) newErrors.type = 'نوع الزامیه';
-        if (!data.unite) newErrors.unite = 'یونیت الزامیه';
         if (!data.amount) newErrors.amount = 'مبلغ الزامیه';
         else if (data.amount < 2300000)
             newErrors.amount = 'کمتر از ۲٬۳۰۰٬۰۰۰ نمیتونی انتخاب کنی';
@@ -70,9 +65,9 @@ export default function CreatePortfolio({ walletBalance }) {
             onSuccess: () => {
                 toast.success('پورتفو با موفقیت ساخته شد 🎉');
                 reset();
-                setResult(''); // ✅ ریست تعداد واحد
-                setLocalErrors({}); // ✅ پاک کردن ارورهای محلی
-                setOpen(false); // ✅ بستن دیالوگ بعد از موفقیت
+                setResult('');
+                setLocalErrors({});
+                setOpen(false);
             },
             onError: (errors) => {
                 if (errors.balance) toast.error(errors.balance);
@@ -104,46 +99,9 @@ export default function CreatePortfolio({ walletBalance }) {
                         </AlertDialogDescription>
 
                         <form className="space-y-2" onSubmit={handleSubmit}>
-                            {/* نوع پورتفو */}
-                            <Select
-                                value={data.type}
-                                onValueChange={(value) =>
-                                    setData('type', value)
-                                }
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Portfo Type" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="cross">Cross</SelectItem>
-                                    <SelectItem value="isolated">
-                                        Isolated
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <InputError
-                                message={errors.type || localErrors.type}
-                            />
-
-                            {/* تعداد یونیت */}
-                            <Select
-                                value={data.unite}
-                                onValueChange={(value) =>
-                                    setData('unite', value)
-                                }
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Unite" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="100">100</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <InputError
-                                message={errors.unite || localErrors.unite}
-                            />
-
-                            {/* مبلغ */}
+                            یونیت 100
+                            <br/>
+                            نوع پورتفو crose
                             <Input
                                 type="text"
                                 value={data.amount}

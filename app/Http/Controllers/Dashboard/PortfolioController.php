@@ -28,7 +28,6 @@ class PortfolioController extends Controller
                 auth()->user()->portfolios()->create([
                     'amount' => $request->amount,
                     'status' => 'open',
-//                    'lever'=>$request->lever, // TODO این لوورو رو از کاربر میگیهر داستان چیه پهلوان
                     'type' => 'cross',
                 ]);
 

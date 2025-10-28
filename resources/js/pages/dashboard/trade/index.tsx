@@ -61,10 +61,9 @@ export default function TradePage({
                 theme: 'auto',
                 backdrop: `rgba(0,0,123,0.4) url("/assets/images/giphy.gif") left top no-repeat `,
                 allowOutsideClick: false,
-                allowEscapeKey: false
+                allowEscapeKey: false,
             });
         });
-
 
         return () => {
             stopListening();
@@ -93,7 +92,38 @@ export default function TradePage({
                     >
                         <div className="col-span-1 space-y-1 lg:col-span-2">
                             {portfolioItem ? (
-                                portfolioItem.amount
+                                <div className={'flex gap-4 items-center'}>
+                                    <div
+                                        className={
+                                            'flex flex-col items-center text-center border border-gray-400 p-4 rounded-md w-full'
+                                        }
+                                    >
+                                        <span>وجه تضمین (تومان)</span>
+                                        {portfolioItem.amount}
+                                    </div>
+                                    <div
+                                        className={
+                                            'flex flex-col items-center text-center border border-gray-400 p-4 rounded-md w-full'
+                                        }
+                                    >
+                                        <span>سود|ضرر(تومان)</span>
+                                        {portfolioItem.amount}
+                                    </div>
+                                    <div
+                                        className={
+                                            'flex flex-col items-center text-center border border-gray-400 p-4 rounded-md w-full'
+                                        }
+                                    >
+                                        <span>
+                                            واحد مجاز خرید:
+                                            {portfolioItem.amount >= 2300000 ? 1 : "0"}
+                                        </span>
+                                        <span>
+                                            واحد مجاز فروش:
+                                            {portfolioItem.amount >= 2300000 ? 1 : "0"}
+                                        </span>
+                                    </div>
+                                </div>
                             ) : (
                                 <CreatePortfolio
                                     walletBalance={AmountOfMoneyInTheWallet}
