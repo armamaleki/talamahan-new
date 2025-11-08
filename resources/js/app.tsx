@@ -25,7 +25,6 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
         const locale = props.initialPage.props.locale;
-        console.log(locale);
         i18n.changeLanguage(locale);
         root.render(<App {...props} />);
     },
