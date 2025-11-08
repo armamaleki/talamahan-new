@@ -29,66 +29,83 @@ import AppLogo from './app-logo';
 import tickets from '@/routes/tickets';
 import notifications from '@/routes/notifications';
 import wallets from '@/routes/wallets';
+import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import i18n from 'i18next';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Ticket',
-        href: tickets.index(),
-        icon: Mail,
-    },
-    {
-        title: 'Privacy policy',
-        href: privacyPolicy(),
-        icon: ShieldCheck,
-    },
-    {
-        title: 'Training',
-        href: training(),
-        icon: GraduationCap,
-    },
-    {
-        title: 'Notifications',
-        href: notifications.index(),
-        icon: BellElectric,
-    },
-    {
-        title: 'Wallet',
-        href: wallets.index(),
-        icon: Wallet,
-    },
-    {
-        title: 'Referral',
-        href: referral(),
-        icon: UsersRound,
-    },
-    {
-        title: 'Trade',
-        href: trade(),
-        icon: ChartCandlestick,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: '#',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: '#',
-        icon: BookOpen,
-    },
-];
 
 export function AppSidebar() {
+    const { t } = useTranslation()
+
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: t('Dashboard'),
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+        {
+            title: t('Ticket'),
+            href: tickets.index(),
+            icon: Mail,
+        },
+        {
+            title: t('Privacy policy'),
+            href: privacyPolicy(),
+            icon: ShieldCheck,
+        },
+        {
+            title: t('Training'),
+            href: training(),
+            icon: GraduationCap,
+        },
+        {
+            title: t('Notifications'),
+            href: notifications.index(),
+            icon: BellElectric,
+        },
+        {
+            title: t('Wallet'),
+            href: wallets.index(),
+            icon: Wallet,
+        },
+        {
+            title: t('Referral'),
+            href: referral(),
+            icon: UsersRound,
+        },
+        {
+            title: t('Trade'),
+            href: trade(),
+            icon: ChartCandlestick,
+        },
+    ];
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: t('Repository'),
+            href: '#',
+            icon: Folder,
+        },
+        {
+            title: t('Documentation'),
+            href: '#',
+            icon: BookOpen,
+        },
+    ];
+    const [side , setSide]=useState('left')
+    useEffect(() => {
+        const lang = i18n.language;
+        if (lang === 'ar') {
+            document.documentElement.dir = 'rtl';
+            setSide('right');
+        } else {
+            document.documentElement.dir = 'ltr';
+            setSide('left');
+        }
+    }, [i18n.language]);
     return (
-        <Sidebar collapsible="icon" variant="floating">
+        <Sidebar side={side} collapsible="icon" variant="floating">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

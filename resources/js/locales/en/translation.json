@@ -1,3 +1,22 @@
 {
+    "Dashboard": "Dashboard",
+    "Ticket": "Ticket",
+    "Privacy policy": "Privacy policy",
+    "Training": "Training",
+    "Notifications": "Notifications",
+    "Wallet": "Wallet",
+    "Referral": "Referral",
+    "Trade": "Trade",
+    "Repository": "Repository",
+    "Documentation": "Documentation",
+    "Language settings": "Language settings",
+    "Update your account's Language settings": "Update your account's Language settings",
+    "Profile": "Profile",
+    "Password": "Password",
+    "Two-Factor Auth": "Two-Factor Auth",
+    "Appearance": "Appearance",
+    "Language": "Language",
+    "Settings": "Settings",
+    "Manage your profile and account settings": "Manage your profile and account settings"
 
 }

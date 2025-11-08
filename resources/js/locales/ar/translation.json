@@ -1,3 +1,21 @@
 {
-
+    "Dashboard": "لوحة القيادة",
+    "Ticket": "تذكرة",
+    "Privacy policy": "سياسة الخصوصية",
+    "Training": "تمرين",
+    "Notifications": "إشعارات",
+    "Wallet": "محفظة",
+    "Referral": "الإحالة",
+    "Trade":"تجارة",
+    "Repository": "مستودع",
+    "Documentation": "التوثيق",
+    "Language settings": "إعدادات اللغة",
+    "Update your account's Language settings": "تحديث إعدادات اللغة في حسابك",
+    "Profile": "حساب تعريفي",
+    "Password":"كلمة المرور",
+    "Two-Factor Auth": "المصادقة الثنائية",
+    "Appearance": "مظهر",
+    "Language": "لغة",
+    "Settings": "إعدادات",
+    "Manage your profile and account settings": "إدارة ملفك الشخصي وإعدادات حسابك"
 }

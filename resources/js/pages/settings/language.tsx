@@ -24,26 +24,26 @@ export default function Language() {
         router.post(language.change(), { lang });
     };
     return (
-      <AppLayout breadcrumbs={breadcrumbs}>
-          <Head title="Language settings" />
-          <SettingsLayout>
-              <div className="space-y-6">
-                  <HeadingSmall
-                      title="Language settings"
-                      description="Update your account's Language settings"
-                  />
-                  <h1>{t('welcome')}</h1>
-                  <button>{t('buy_gold')}</button>
-                  <ButtonGroup>
-                      <Button onClick={()=>changeLanguage('en')} >
-                          انگلیسی
-                      </Button>
-                      <Button onClick={()=>changeLanguage('ar')} >
-                          عربی
-                      </Button>
-                  </ButtonGroup>
-              </div>
-          </SettingsLayout>
-      </AppLayout>
-  );
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title={t('Language settings')} />
+            <SettingsLayout>
+                <div className="space-y-6">
+                    <HeadingSmall
+                        title={t('Language settings')}
+                        description={t(
+                            "Update your account's Language settings",
+                        )}
+                    />
+                    <ButtonGroup  orientation={'vertical'} >
+                        <Button onClick={() => changeLanguage('en')}>
+                            English
+                        </Button>
+                        <Button onClick={() => changeLanguage('ar')}>
+                            إنجليزي
+                        </Button>
+                    </ButtonGroup>
+                </div>
+            </SettingsLayout>
+        </AppLayout>
+    );
 }
