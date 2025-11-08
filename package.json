@@ -56,6 +56,7 @@
         "globals": "^15.14.0",
         "i18next": "^25.5.3",
         "input-otp": "^1.4.2",
+        "js-cookie": "^3.0.5",
         "laravel-vite-plugin": "^2.0",
         "lightweight-charts": "^5.0.9",
         "lucide-react": "^0.475.0",

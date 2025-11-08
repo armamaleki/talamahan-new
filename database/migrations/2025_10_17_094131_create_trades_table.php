@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('end')->nullable(); // قیمت پایان معامله
             $table->integer('profit_limit')->nullable(); // حد سود
             $table->integer('loss_limit')->nullable(); // حد زرر
-            $table->enum('status', ['open', 'close'])->default('ok'); // نوع ترید
+            $table->enum('status', ['open', 'close'])->default('open'); // نوع ترید
             $table->foreignId('start_id')->nullable()->constrained('trades')->onDelete('cascade'); //از کی خریده این ینی چی ؟؟
             $table->foreignId('end_id')->nullable()->constrained('trades')->onDelete('cascade');//به کی فروخته
 

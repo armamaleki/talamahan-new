@@ -7,13 +7,11 @@ import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import './i18n';
 import { configureEcho } from '@laravel/echo-react';
+import i18n from 'i18next';
 
 configureEcho({
     broadcaster: 'reverb',
 });
-
-
-
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -26,7 +24,9 @@ createInertiaApp({
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
-
+        const locale = props.initialPage.props.locale;
+        console.log(locale);
+        i18n.changeLanguage(locale);
         root.render(<App {...props} />);
     },
     progress: {

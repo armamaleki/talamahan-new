@@ -9,6 +9,7 @@ import { show } from '@/routes/two-factor';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
+import language from '@/routes/language';
 
 const sidebarNavItems: NavItem[] = [
     {
@@ -29,6 +30,11 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Appearance',
         href: editAppearance(),
+        icon: null,
+    },
+    {
+        title: 'انتخاب زبان',
+        href: language.index(),
         icon: null,
     },
 ];
