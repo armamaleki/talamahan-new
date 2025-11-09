@@ -21,13 +21,16 @@ import {
     BellPlus,
     Telescope,
     HeartPulse,
+    Settings
 } from 'lucide-react';
+
 
 import user from '@/routes/manager/user';
 import role from '@/routes/manager/role';
 import ticket from '@/routes/manager/ticket';
 import notification from '@/routes/manager/notification';
 import { pulse, telescope } from '@/routes';
+import setting from '@/routes/manager/setting';
 const mainNavItems: NavItem[] = [
     {
         title: 'Users',
@@ -58,6 +61,11 @@ const mainNavItems: NavItem[] = [
         title: 'Pulse',
         href: pulse(),
         icon: HeartPulse,
+    },
+    {
+        title: 'Setting',
+        href: setting.index(),
+        icon: Settings,
     },
 
 ];
