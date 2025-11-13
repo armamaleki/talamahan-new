@@ -12,9 +12,11 @@ class TradeController extends Controller
 {
     public function index()
     {
-//        قوانین ورود به صفحه ترید
-//     TODO اینو از پهلوان بگیر
-//        TODO ساعت کاری بازار رو درست کن
+//        if(isMarketOpen()){
+//            return 'open';
+//        }else{
+//            return 'closed';
+//        }
 //        TODO دقت کن که باید فقط معاملات امروز رو چک کنی (ساعت کاری بازار رو بپرس از پهلوان ____ اگه بگه  ;))
         $pricesList = GoldPrice::latest('time')->get()->reverse()->values();
         $AmountOfMoneyInTheWallet = auth()->user()->wallet->balance ?? 0;

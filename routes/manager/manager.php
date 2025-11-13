@@ -46,4 +46,5 @@ Route::prefix('notification')->as('notification.')->group(function () {
 
 Route::prefix('setting')->as('setting.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Manager\SettingController::class, 'index'])->name('index');
+    Route::post('/update', [\App\Http\Controllers\Manager\SettingController::class, 'update'])->name('update');
 });

@@ -51,7 +51,6 @@ export default function CreateTicket() {
             setTranslatedText(translated);
             toast.success('ترجمه انجام شد ✅');
         } catch (error) {
-            console.error(error);
             toast.error('خطا در ترجمه!');
         }finally {
             setLoading(false);

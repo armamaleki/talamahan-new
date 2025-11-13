@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            $table->string('site_name')->nullable();
+            $table->string('site_email')->nullable();
+            $table->string('site_phone')->nullable();
+            $table->string('site_address')->nullable();
+            $table->string('site_instagram')->nullable();
+            $table->string('site_youtube')->nullable();
+            $table->string('site_linkedin')->nullable();
+            $table->string('site_twitter')->nullable();
+            $table->string('site_facebook')->nullable();
+
             $table->time('open')->default('11:00:00');
             $table->time('close')->nullable('19:00:00');
             $table->string('commission')->default('17000');

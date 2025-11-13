@@ -19,6 +19,27 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        dd($request->all());
+        $data = $request->validate([
+            'site_name' => 'nullable',
+            'site_email' => 'nullable',
+            'site_phone' => 'nullable',
+            'site_address' => 'nullable',
+            'site_instagram' => 'nullable',
+            'site_youtube' => 'nullable',
+            'site_linkedin' => 'nullable',
+            'site_twitter' => 'nullable',
+            'site_facebook' => 'nullable',
+
+            'openHour' => "required",
+            'closeHour' => "required",
+            'commission' => "required",
+        ]);
+
+        $setting = Setting::firstOrNew([]);
+        $setting->open = $data['openHour'];
+        $setting->close = $data['closeHour'];
+        $setting->fill($data);
+        $setting->save();
+        clearSettingCache();
     }
 }

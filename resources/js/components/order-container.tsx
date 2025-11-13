@@ -25,7 +25,7 @@ export default function OrderContainer() {
         // post(route('orders.store'));
     };
     return (
-        <>
+        <div className={`grid grid-cols-6 gap-2`}>
             <div className={`col-span-2 rounded-md border border-gray-600`}>
                 <div className="h-50 overflow-auto text-center text-red-500">
                     <p>۴۷٬۹۲۹ - ۱</p>
@@ -66,7 +66,7 @@ export default function OrderContainer() {
             </div>
             <div
                 className={`col-span-4 w-fit rounded-md border border-gray-600 p-2`}>
-                <Tabs defaultValue="order" className="w-[400px]">
+                <Tabs defaultValue="order" className="">
                     <TabsList>
                         <TabsTrigger value="order">اوردر</TabsTrigger>
                         <TabsTrigger value="password">لفظ</TabsTrigger>
@@ -125,6 +125,6 @@ export default function OrderContainer() {
                     </TabsContent>
                 </Tabs>
             </div>
-        </>
+        </div>
     );
 }
