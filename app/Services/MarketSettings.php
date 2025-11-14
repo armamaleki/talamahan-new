@@ -29,6 +29,7 @@ class MarketSettings
     {
         $open = Carbon::parse(self::open());
         $close = Carbon::parse(self::close());
+//        dd($open->format('Y-m-d H:i:s'));
         $now = Carbon::now();
         return $now->between($open, $close);
     }

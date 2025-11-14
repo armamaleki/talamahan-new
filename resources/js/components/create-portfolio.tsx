@@ -102,6 +102,8 @@ export default function CreatePortfolio({ walletBalance }) {
                             یونیت 100
                             <br/>
                             نوع پورتفو crose
+                            <br/>
+                            <br/>
                             <Input
                                 type="text"
                                 value={data.amount}
@@ -116,6 +118,7 @@ export default function CreatePortfolio({ walletBalance }) {
 
                             <Button
                                 type="submit"
+                                variant={'success'}
                                 className="relative w-full"
                                 disabled={processing}
                             >
