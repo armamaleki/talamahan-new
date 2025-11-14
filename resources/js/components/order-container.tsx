@@ -13,7 +13,7 @@ export default function OrderContainer() {
         fee: '',
         tp: '',
         sl: '',
-        type: '', // مثلاً buy یا sell
+        type: '',
     });
     const newErrors: Record<string, string> = {};
 
@@ -65,7 +65,7 @@ export default function OrderContainer() {
                 </div>
             </div>
             <div
-                className={`col-span-4 w-fit rounded-md border border-gray-600 p-2`}>
+                className={`col-span-4 w-full rounded-md border border-gray-600 p-2`}>
                 <Tabs defaultValue="order" className="">
                     <TabsList>
                         <TabsTrigger value="order">اوردر</TabsTrigger>
@@ -78,7 +78,7 @@ export default function OrderContainer() {
                                <Input
                                    name="amount"
                                    type="text"
-                                   placeholder="حجم"
+                                   placeholder="حجم {واحد از 1 تا 10 واحد}"
                                    value={data.amount}
                                    onChange={(e) => setData('amount', e.target.value)}/>
                                 <InputError
@@ -87,20 +87,20 @@ export default function OrderContainer() {
                                <Input
                                    name="fee"
                                    type="text"
-                                   placeholder="قیمت"
+                                   placeholder="قیمت فروش یا خرید "
                                    value={data.fee}
                                    onChange={(e) => setData('fee', e.target.value)}
                                />
                                <Input
                                    name="tp"
-                                   type="text"
+                                   type="number"
                                    placeholder="حد سود"
                                    value={data.tp}
                                    onChange={(e) => setData('tp', e.target.value)}
                                />
                                <Input
                                    name="sl"
-                                   type="text"
+                                   type="number"
                                    placeholder="حد ضرر"
                                    value={data.sl}
                                    onChange={(e) => setData('sl', e.target.value)}

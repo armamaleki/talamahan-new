@@ -4,52 +4,49 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Portfolio\StorePortfolioRequest;
-use App\Models\Portfolio;
+use Illuminate\Support\Facades\DB;
 
 class PortfolioController extends Controller
 {
     public function store(StorePortfolioRequest $request)
     {
+        $data = $request->validated([
+            'amount' => 'required|numeric|min:2300000|max:23000000',
+        ]);
+        $amount = (int)(float)str_replace(',', '', $request->get('amount'));
         if (!isMarketOpen()) {
             return back()->withErrors(['balance' => 'بازار بسته است.']);
         }
         $portfolios = auth()->user()
             ->portfolios()
             ->whereDate('created_at', today())
-            ->where('status', '==', 'open')
+            ->where('status', 'open')
             ->get();
-        dd($portfolios);
 
+        if ($portfolios->isNotEmpty()) {
+            return back()->withErrors(['portfolio' => 'شما یک پورتفو باز دارید!!']);
+        }
+        //TODO حتما چک کن معامله باز نداشته باشه
 
+        $wallet = auth()->user()->wallet;
 
-        //  TODO ساعت کاری بازار رو بزار همین طور قوانین باز شدن پورتفو
-//        $amount = (int)(float)str_replace(',', '', $request->amount);
-//        $walletBalance = (int)(float)auth()->user()->wallet->balance;
-////        $walletBalance = (int)(float) 10000;
-//        if (!$walletBalance) {
-//            return back()->withErrors(['wallet' => 'کیف پول یافت نشد یا موجودی صفر است.']);
-//        }
-//
-//        if ($amount <= $walletBalance) {
-////            TODO چک کردن بیشترین واحد مجاز سایت
-//            $portfolios = auth()->user()->portfolios;
-//            $allClosed = $portfolios->every(function ($portfolio) {
-//                return $portfolio->status === 'close';
-//            });
-//
-//            if ($allClosed) {
-//                auth()->user()->portfolios()->create([
-//                    'amount' => $request->amount,
-//                    'status' => 'open',
-//                    'type' => 'cross',
-//                ]);
-//
-//                return back();
-//            } else {
-//                return back()->withErrors(['portfolio' => 'تا زمانی که تمام پورتفوهای قبلی بسته نشدن، امکان ایجاد پورتفوی جدید وجود ندارد.']);
-//            }
-//        } else {
-//            return back()->withErrors(['balance' => 'موجودی کیف پول کافی نیست.']);
-//        }
+        if ($wallet->balance <= 0) {
+            return back()->withErrors(['wallet' => 'کیف پول شما خالیست.']);
+        }
+        if ($wallet->balance <= $amount) {
+            return back()->withErrors(['wallet' => 'موجودی کیف پول شما برای این تراکنش کافی نیست!']);
+        }
+
+        DB::transaction(function () use ($amount, $wallet, $request) {
+            auth()->user()->portfolios()->create([
+                'amount' => $request->amount,
+                'status' => 'open',
+                'type' => 'cross',
+            ]);
+            $wallet->balance -= $amount;
+            $wallet->save();
+        });
+
+        return back()->withErrors(['portfolio' => 'پورتفو شما با موفیت ایجاد شد!']);
     }
 }

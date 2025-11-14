@@ -87,13 +87,15 @@ export default function TradePage({
             </ul>
             <Card className={'bg-gray-800'}>
                 <CardContent>
-                    <div className={`grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-6`}>
+                    <div
+                        className={`grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-8`}
+                    >
                         <div className="col-span-1 space-y-1 lg:col-span-2">
                             {portfolioItem ? (
-                                <div className={'flex gap-4 items-center'}>
+                                <div className={'flex items-center gap-2'}>
                                     <div
                                         className={
-                                            'flex flex-col items-center text-center border border-gray-400 p-4 rounded-md w-full'
+                                            'flex w-full flex-col items-center rounded-md border border-gray-400 p-4 text-center'
                                         }
                                     >
                                         <span>وجه تضمین (تومان)</span>
@@ -101,7 +103,7 @@ export default function TradePage({
                                     </div>
                                     <div
                                         className={
-                                            'flex flex-col items-center text-center border border-gray-400 p-4 rounded-md w-full'
+                                            'flex w-full flex-col items-center rounded-md border border-gray-400 p-4 text-center'
                                         }
                                     >
                                         <span>سود|ضرر(تومان)</span>
@@ -109,16 +111,20 @@ export default function TradePage({
                                     </div>
                                     <div
                                         className={
-                                            'flex flex-col items-center text-center border border-gray-400 p-4 rounded-md w-full'
+                                            'flex w-full flex-col items-center rounded-md border border-gray-400 p-4 text-center'
                                         }
                                     >
                                         <span>
                                             واحد مجاز خرید:
-                                            {portfolioItem.amount >= 2300000 ? 1 : "0"}
+                                            {portfolioItem.amount >= 2300000
+                                                ? 1
+                                                : '0'}
                                         </span>
                                         <span>
                                             واحد مجاز فروش:
-                                            {portfolioItem.amount >= 2300000 ? 1 : "0"}
+                                            {portfolioItem.amount >= 2300000
+                                                ? 1
+                                                : '0'}
                                         </span>
                                     </div>
                                 </div>
@@ -127,7 +133,7 @@ export default function TradePage({
                                     walletBalance={AmountOfMoneyInTheWallet}
                                 />
                             )}
-                                <OrderContainer />
+                            <OrderContainer />
                             <div>
                                 <Tabs
                                     defaultValue="account"
@@ -156,9 +162,12 @@ export default function TradePage({
                                 </Tabs>
                             </div>
                         </div>
-                        <div className={`col-span-1 space-y-2 md:col-span-2 lg:col-span-4`}>
+                        <div
+                            className={`col-span-1 space-y-2 md:col-span-3 lg:col-span-6`}
+                        >
                             <div
-                                className={`flex w-full flex-col flex-wrap items-center rounded-md bg-gray-900 shadow shadow-gray-50`}>
+                                className={`flex w-full flex-col flex-wrap items-center rounded-md bg-gray-900 shadow shadow-gray-50`}
+                            >
                                 <div
                                     className={`flex items-center divide-x divide-gray-200 p-2`}
                                 >
@@ -177,7 +186,6 @@ export default function TradePage({
                                 </div>
                             </div>
                             <div>
-
                                 <TradingViewChart pricesList={pricesList} />
                             </div>
                         </div>

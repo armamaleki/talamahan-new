@@ -55,6 +55,7 @@ export default function CreatePortfolio({ walletBalance }) {
             newErrors.amount = 'کمتر از ۲٬۳۰۰٬۰۰۰ نمیتونی انتخاب کنی';
         else if (data.amount > 23000000)
             newErrors.amount = 'بیشتر از ۲۳٬۰۰۰٬۰۰۰ نمیتونی انتخاب کنی';
+        if (walletBalance < data.amount) newErrors.amount = 'موجودی کیف پولت کافی نیست';
 
         if (Object.keys(newErrors).length > 0) {
             setLocalErrors(newErrors);
