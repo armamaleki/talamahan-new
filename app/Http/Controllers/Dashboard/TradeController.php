@@ -12,17 +12,12 @@ class TradeController extends Controller
 {
     public function index()
     {
-//        if(isMarketOpen()){
-//            return 'open';
-//        }else{
-//            return 'closed';
-//        }
-//        TODO دقت کن که باید فقط معاملات امروز رو چک کنی (ساعت کاری بازار رو بپرس از پهلوان ____ اگه بگه  ;))
-        $pricesList = GoldPrice::latest('time')->get()->reverse()->values();
+        if(!isMarketOpen()){
+            return to_route('dashboard')->with('message' , 'ساعت کاری بازار به اتمام رسیده است.');
+        }
         $AmountOfMoneyInTheWallet = auth()->user()->wallet->balance ?? 0;
         $portfolio = auth()->user()->portfolios()->where('status' , 'open')->latest()->first();
         return Inertia::render('dashboard/trade/index' , [
-            'pricesList' => new GoldPriceCollection($pricesList),
             'AmountOfMoneyInTheWallet' => $AmountOfMoneyInTheWallet,
             'portfolioItem' => $portfolio,
         ]);

@@ -3,7 +3,7 @@ import { CandlestickSeries, createChart } from 'lightweight-charts';
 import { useEcho } from "@laravel/echo-react";
 
 
-export default function TradingViewChart({pricesList}) {
+export default function TradingViewChart() {
     // console.log(pricesList.data.prices);
     useEcho(
         `chart-price-channel`,

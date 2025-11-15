@@ -186,7 +186,7 @@ export default function TradePage({
                                 </div>
                             </div>
                             <div>
-                                <TradingViewChart pricesList={pricesList} />
+                                <TradingViewChart />
                             </div>
                         </div>
                     </div>
