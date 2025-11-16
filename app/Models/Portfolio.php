@@ -13,9 +13,7 @@ class Portfolio extends Model
     protected $fillable = [
         'user_id',
         'amount',
-        'lever',
         'result',
-        'type',
         'status',
     ];
 }

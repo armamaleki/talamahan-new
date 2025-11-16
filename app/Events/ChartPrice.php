@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -16,9 +17,9 @@ class ChartPrice implements ShouldBroadcast
      * Create a new event instance.
      */
     public $price;
-    public function __construct($price)
+    public function __construct()
     {
-        $this->price = $price;
+        $this->price = 47010;
     }
 
     /**
@@ -29,7 +30,12 @@ class ChartPrice implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('chart-price-channel'),
+            new PresenceChannel('gold-price-channel'),
         ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'gold-price.fake';
     }
 }

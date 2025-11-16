@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('site_linkedin')->nullable();
             $table->string('site_twitter')->nullable();
             $table->string('site_facebook')->nullable();
-
             $table->time('open')->default('11:00:00');
             $table->time('close')->nullable('19:00:00');
             $table->string('commission')->default('17000');
+            $table->string('price_limit')->nullable();
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained('user')

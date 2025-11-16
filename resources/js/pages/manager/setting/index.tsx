@@ -24,6 +24,7 @@ export default function Setting({ settingItem }) {
         site_linkedin: settingItem?.site_linkedin || '',
         site_twitter: settingItem?.site_twitter || '',
         site_facebook: settingItem?.site_facebook || '',
+        price_limit: settingItem?.price_limit || '',
     });
 
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
@@ -42,15 +43,15 @@ export default function Setting({ settingItem }) {
         if (!data.closeHour) {
             newErrors.closeHour = 'وارد کردن ساعت بسته شدن الزامی است';
         }
+
         if (data.commission === undefined || data.commission === null || data.commission === '') {
             newErrors.commission = 'وارد کردن کمیسیون الزامی است';
-        } else if (isNaN(data.commission)) {
-            newErrors.commission = 'کمیسیون باید عدد باشد';
-        } else if (Number(data.commission) < 0) {
-            newErrors.commission = 'کمیسیون نمی‌تواند کمتر از صفر باشد';
-        } else if (Number(data.commission) > 100000) {
-            newErrors.commission = 'کمیسیون نمی‌تواند بیشتر از 100000 تومان باشد';
         }
+
+        if (!data.price_limit) {
+            newErrors.price_limit = 'وارد کردن حد سود یا زرر الزامی است!!';
+        }
+
 
         if (Object.keys(newErrors).length > 0) {
             setLocalErrors(newErrors);
@@ -86,7 +87,7 @@ export default function Setting({ settingItem }) {
                                         setData('openHour', e.target.value)
                                     }
                                     type="time"
-                                    placeholder="اجباری {از 0 تا 100000 تومن}"
+                                    placeholder="اجباری "
                                 />
                                 <InputError
                                     message={
@@ -106,11 +107,31 @@ export default function Setting({ settingItem }) {
                                         setData('closeHour', e.target.value)
                                     }
                                     type="time"
-                                    placeholder="اجباری {از 0 تا 100000 تومن}"
+                                    placeholder="اجباری"
                                 />
                                 <InputError
                                     message={
                                         errors.closeHour || localErrors.closeHour
+                                    }
+                                />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-4">
+                            <Label htmlFor="closeHour">حد مجاز قیمت</Label>
+                            <div className="col-span-1 md:col-span-3">
+                                <Input
+                                    name="price_limit"
+                                    id="price_limit"
+                                    value={data.price_limit}
+                                    onChange={(e) =>
+                                        setData('price_limit', e.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="اجباری {از 0 تا 100000 تومن}"
+                                />
+                                <InputError
+                                    message={
+                                        errors.price_limit || localErrors.price_limit
                                     }
                                 />
                             </div>

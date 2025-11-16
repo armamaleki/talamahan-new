@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
 
     Route::get('/trade' ,[\App\Http\Controllers\Dashboard\TradeController::class , 'index'])->name('trade');
 
+    Route::post('order/store', [\App\Http\Controllers\Dashboard\OrderController::class, 'store'])->name('order.store');
+
     Route::post('/portfolios', [\App\Http\Controllers\Dashboard\PortfolioController::class, 'store'])->name('portfolios.store');
 
     Route::prefix('wallets')->name('wallets.')->group(function () {

@@ -33,6 +33,7 @@ class SettingController extends Controller
             'openHour' => "required",
             'closeHour' => "required",
             'commission' => "required",
+            'price_limit' => "required",
         ]);
 
         $setting = Setting::firstOrNew([]);

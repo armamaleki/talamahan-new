@@ -16,6 +16,7 @@ class PortfolioController extends Controller
         $amount = (int)(float)str_replace(',', '', $request->get('amount'));
         if (!isMarketOpen()) {
             return back()->withErrors(['balance' => 'بازار بسته است.']);
+            // @TODO تعطیلات بازار رو هم چک کن تعطیلات رسمی به میلادی
         }
         $portfolios = auth()->user()
             ->portfolios()
@@ -26,7 +27,6 @@ class PortfolioController extends Controller
         if ($portfolios->isNotEmpty()) {
             return back()->withErrors(['portfolio' => 'شما یک پورتفو باز دارید!!']);
         }
-        //TODO حتما چک کن معامله باز نداشته باشه
 
         $wallet = auth()->user()->wallet;
 
@@ -36,17 +36,15 @@ class PortfolioController extends Controller
         if ($wallet->balance <= $amount) {
             return back()->withErrors(['wallet' => 'موجودی کیف پول شما برای این تراکنش کافی نیست!']);
         }
-
+        //@TODO کاربر برداشت وجه داره یا نه
         DB::transaction(function () use ($amount, $wallet, $request) {
             auth()->user()->portfolios()->create([
                 'amount' => $request->amount,
                 'status' => 'open',
-                'type' => 'cross',
             ]);
             $wallet->balance -= $amount;
             $wallet->save();
         });
-
         return back()->withErrors(['portfolio' => 'پورتفو شما با موفیت ایجاد شد!']);
     }
 }

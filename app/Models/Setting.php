@@ -20,5 +20,6 @@ class Setting extends Model
         'site_linkedin',
         'site_twitter',
         'site_facebook',
+        'price_limit',
     ];
 }

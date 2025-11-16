@@ -21,6 +21,7 @@ export default function TradePage({
     pricesList,
     AmountOfMoneyInTheWallet,
     portfolioItem,
+    settingItem,
 }) {
     const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState(0);
@@ -133,7 +134,7 @@ export default function TradePage({
                                     walletBalance={AmountOfMoneyInTheWallet}
                                 />
                             )}
-                            <OrderContainer />
+                            <OrderContainer price_limit={settingItem.data.price_limit} />
                             <div>
                                 <Tabs
                                     defaultValue="account"
