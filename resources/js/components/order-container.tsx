@@ -10,6 +10,10 @@ import { useForm } from '@inertiajs/react';
 import { useEchoPresence } from '@laravel/echo-react';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from '@/components/ui/label';
+import OrderItems from '@/components/order-items';
+
 
 export default function OrderContainer(price_limit: object) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -22,7 +26,8 @@ export default function OrderContainer(price_limit: object) {
     const newErrors: Record<string, string> = {};
     const [localErrors, setLocalErrors] = useState({});
     const [price, setPrice] = useState(0);
-
+    const [realMoney , setRealMoney] = useState(false)
+    const maxFee = Number(price_limit.price_limit) || 10;
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -35,10 +40,10 @@ export default function OrderContainer(price_limit: object) {
             [name]: '',
         }));
     };
-    const handleSubmit = (type) => (e) => {
+
+    const handleSubmit = (orderType: 'buy' | 'sell') => (e: React.FormEvent) => {
         e.preventDefault();
         if (!price) return;
-        // if (!type) return;@ TODO اعتبار سنجی اینو انجام بده
         setLocalErrors({});
         if (!data.amount) {
             newErrors.amount = 'حجم الزامیه';
@@ -48,44 +53,31 @@ export default function OrderContainer(price_limit: object) {
             newErrors.amount = 'حجم باید بین 1 تا 10 باشه';
         }
 
-        const maxFee = Number(price_limit) || 10;
-        const feeValue = Number(data.fee);
-
-        if (!feeValue) {
+        let computedMaxFee = maxFee;
+        let computedMinFee = -maxFee;
+        if (realMoney) {
+            computedMaxFee = maxFee + price;
+        }
+        if (realMoney) {
+            computedMinFee = price-maxFee ;
+        }
+        if (!data.fee) {
             newErrors.fee = 'قیمت الزامیه';
-        } else if (isNaN(feeValue)) {
+        } else if (isNaN(data.fee)) {
             newErrors.fee = 'فقط عدد وارد کنید';
-        } else if (feeValue > maxFee) {
-            newErrors.fee = `نباید بیشتراز ${maxFee} باشد`;
-        } else if (feeValue <= 0) {
-            newErrors.fee = `قیمت باید بزرگتر از ${price} باشه`;
+        } else if (Number(data.fee) > computedMaxFee) {
+            newErrors.fee = `نباید بیشتر از ${computedMaxFee} باشد`;
+        }else if (Number(data.fee) < computedMinFee) {
+            newErrors.fee = `نباید کم تر از ${computedMinFee} باشد`;
         }
 
-        // if (!data.tp) {
-        //     newErrors.tp = 'حد سود الزامیست';
-        // } else if (isNaN(data.tp)) {
-        //     newErrors.tp = 'فقط عدد وارد کنید';
-        // } else {
-        //     const tpValue = Number(data.tp);
-        //     const maxTP = Number(data.fee) + 90;
-        //
-        //     if (tpValue > maxTP) {
-        //         newErrors.tp = `حد سود نباید بیشتر از ${maxTP} باشد`;
-        //     }
-        // }
-        //
-        // if (!data.sl) {
-        //     newErrors.sl = 'حد ضرر الزامیست';
-        // } else if (isNaN(data.sl)) {
-        //     newErrors.sl = 'فقط عدد وارد کنید';
-        // } else {
-        //     const slValue = Number(data.sl);
-        //     const minSL = Number(data.fee) - 90;
-        //
-        //     if (slValue < minSL) {
-        //         newErrors.sl = `حد ضرر نباید کمتر از ${minSL} باشد`;
-        //     }
-        // }
+
+        if (isNaN(data.tp)) {
+            newErrors.tp = 'فقط عدد وارد کنید';
+        }
+        else if (isNaN(data.sl)) {
+            newErrors.sl = 'فقط عدد وارد کنید';
+        }
 
         if (Object.keys(newErrors).length > 0) {
             setLocalErrors(newErrors);
@@ -93,7 +85,7 @@ export default function OrderContainer(price_limit: object) {
         }
         setData({
             ...data,
-            type: type,
+            type: orderType,
         });
         post(order.store(data), {
             preserveScroll: true,
@@ -118,82 +110,11 @@ export default function OrderContainer(price_limit: object) {
             setPrice(data.price);
         });
     }, []);
-    const [value, setValue] = useState(50); // 50 یعنی وسط = 0
-    const mappedValue = ((value - 50) / 50) * 10;
     return (
         <>
-            <div
-                className={
-                    'flex w-full flex-col items-center justify-center gap-3'
-                }
-            >
-                {/* عدد فعلی در وسط */}
-                <div className="text-center text-xl font-semibold select-none">
-                    {mappedValue.toFixed(1)}
-                </div>
-
-                {/* برچسب‌های -10 و +10 در دو انتها */}
-                <div className="flex w-[60%] justify-between text-sm text-gray-500">
-                    <span>-10</span>
-                    <span>0</span>
-                    <span>+10</span>
-                </div>
-
-                <Slider
-                    value={[value]}
-                    min={0}
-                    max={100}
-                    step={1}
-                    onValueChange={(v) => setValue(v[0])}
-                    className="w-[60%]"
-                />
-            </div>
-
-            {/*@TODO ورودی داشته باشه رنج باشه وسط باشه تیک داشته باشه که وقتی فعال شد
-            ورودی ها عوض بشن بشن عدد واقعی سایت
-            غیر فعال بود عدد 1 و1 1 باشه
-
-            */}
             <ToastContainer />
             <div className={`grid grid-cols-6 gap-2`}>
-                <div className={`col-span-2 rounded-md border border-gray-600`}>
-                    <div className="h-50 overflow-auto text-center text-red-500">
-                        <p>۴۷٬۹۲۹ - ۱</p>
-                        <p>۴۷٬۹۳۵ - ۲</p>
-                        <p>۴۷٬۹۴۱ - ۱</p>
-                        <p>۴۷٬۹۴۵ - ۲</p>
-                        <p>۴۷٬۹۵۰ - ۱</p>
-                        <p>۴۷٬۹۵۳ - ۲</p>
-                        <p>۴۷٬۹۶۰ - ۱</p>
-                        <p>۴۷٬۹۸۵ - ۱</p>
-                        <p>۴۷٬۹۹۷ - ۱</p>
-                        <p>۴۷٬۹۹۹ - ۱</p>
-                        <p>۴۸٬۰۱۰ - ۲</p>
-                        <p>۴۸٬۰۱۹ - ۱</p>
-                        <p>۴۸٬۰۳۵ - ۱</p>
-                        <p>۴۸٬۰۴۷ - ۱</p>
-                    </div>
-                    <div className="flex w-full items-center justify-center bg-fuchsia-400 p-2">
-                        <p>{price.toLocaleString('fa-IR')}</p>
-                        <p>:مظنه</p>
-                    </div>
-                    <div className="h-50 overflow-auto text-center text-green-500">
-                        <p>۴۷٬۹۲۹ - ۱</p>
-                        <p>۴۷٬۹۳۵ - ۲</p>
-                        <p>۴۷٬۹۴۱ - ۱</p>
-                        <p>۴۷٬۹۴۵ - ۲</p>
-                        <p>۴۷٬۹۵۰ - ۱</p>
-                        <p>۴۷٬۹۵۳ - ۲</p>
-                        <p>۴۷٬۹۶۰ - ۱</p>
-                        <p>۴۷٬۹۸۵ - ۱</p>
-                        <p>۴۷٬۹۹۷ - ۱</p>
-                        <p>۴۷٬۹۹۹ - ۱</p>
-                        <p>۴۸٬۰۱۰ - ۲</p>
-                        <p>۴۸٬۰۱۹ - ۱</p>
-                        <p>۴۸٬۰۳۵ - ۱</p>
-                        <p>۴۸٬۰۴۷ - ۱</p>
-                    </div>
-                </div>
+                <OrderItems realPrice={price}/>
                 <div
                     className={`col-span-4 w-full rounded-md border border-gray-600 p-2`}
                 >
@@ -204,11 +125,25 @@ export default function OrderContainer(price_limit: object) {
                         </TabsList>
                         <TabsContent value="order">
                             <Card className={'space-y-4 p-2'}>
+                                <div className="flex items-center gap-3">
+                                    <Checkbox
+                                        checked={realMoney}
+                                        onCheckedChange={(value) => setRealMoney(value)}
+                                        id="money" />
+                                    <Label htmlFor="money">در صورت فعال بودن باید قیمت واقعی بزاری </Label>
+                                </div>
+                                <Slider
+                                    value={[10]}
+                                    min={-maxFee}
+                                    max={maxFee}
+                                    step={1}
+                                    onValueChange={()=>{}}
+                                />
                                 <div className={'space-y-4'}>
                                     <Input
                                         name="amount"
                                         type="text"
-                                        placeholder="max:10"
+                                        placeholder={'max:12'}
                                         value={data.amount}
                                         onChange={handleChange}
                                     />
@@ -220,7 +155,7 @@ export default function OrderContainer(price_limit: object) {
                                     <Input
                                         name="fee"
                                         type="text"
-                                        placeholder={`max: ${price_limit.price_limit}`}
+                                        placeholder={`for example ${realMoney ? '20450' : '10'} max: ${price_limit.price_limit}`}
                                         value={data.fee}
                                         onChange={handleChange}
                                     />

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('status', ['open', 'close'])->default('open'); // نوع ترید
             $table->foreignId('start_id')->nullable()->constrained('trades')->onDelete('cascade'); //از کی خریده این ینی چی ؟؟
             $table->foreignId('end_id')->nullable()->constrained('trades')->onDelete('cascade');//به کی فروخته
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
