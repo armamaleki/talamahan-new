@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useEchoPresence } from '@laravel/echo-react';
 import TradingViewChart from '@/components/trading-view-chart';
 import CreatePortfolio from '@/components/create-portfolio';
-import OrderContainer from '@/components/order-container';
+import OrderContainer from '@/pages/dashboard/trade/order-container';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 

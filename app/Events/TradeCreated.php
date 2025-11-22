@@ -22,9 +22,9 @@ class TradeCreated implements ShouldBroadcast
      */
 
 
-    public function __construct(Trade $trade)
+    public function __construct()
     {
-        $this->trade = $trade;
+//        $this->trade = $trade;
         //
     }
 
@@ -33,10 +33,10 @@ class TradeCreated implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
+    public function broadcastOn(): PrivateChannel
     {
-        return [new PrivateChannel("trades.{$this->trade->type}")];
-
+        return new PrivateChannel('trades.buy');
+//        return [new PrivateChannel("trades.{$this->trade->type}")];
     }
 
     public function broadcastAs(): string
@@ -47,9 +47,8 @@ class TradeCreated implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'id' => $this->trade->id,
-            'side' => $this->trade->type,
-            'start' => $this->trade->start,
+            'id' => '1',
+            'type' => 'buy',
         ];
     }
 }

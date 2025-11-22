@@ -20,14 +20,16 @@ Broadcast::channel('gold-trade-lobby', function ($user) {
     ] ;
 });
 
-Broadcast::channel('trades.buy', function () {
-    return auth()->check();
-});
-Broadcast::channel('trades.sell', function () {
+Broadcast::channel('chart-price-channel', function () {
     return auth()->check();
 });
 
-Broadcast::channel('chart-price-channel', function () {
+
+Broadcast::channel('trades.purchase', function () {
+    return auth()->check();
+});
+
+Broadcast::channel('trades.sale', function () {
     return auth()->check();
 });
 
