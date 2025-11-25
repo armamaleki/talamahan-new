@@ -7,6 +7,7 @@ use App\Http\Resources\Dashboard\Prices\GoldPriceCollection;
 use App\Http\Resources\Dashboard\Trade\SettingResource;
 use App\Models\GoldPrice;
 use App\Models\Setting;
+use App\Models\Trade;
 use App\Models\Wallet;
 use Inertia\Inertia;
 
@@ -19,6 +20,8 @@ class TradeController extends Controller
         }
         $AmountOfMoneyInTheWallet = auth()->user()->wallet->balance ?? 0;
         $portfolio = auth()->user()->portfolios()->where('status' , 'open')->latest()->first();
+        $sellers = Trade::where('type' , 'sale')->latest()->get();
+//        dd($sellers);
         $setting = Setting::first();
         return Inertia::render('dashboard/trade/index' , [
             'AmountOfMoneyInTheWallet' => $AmountOfMoneyInTheWallet,

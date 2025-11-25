@@ -2,29 +2,24 @@
 
 namespace App\Events;
 
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Random\RandomException;
 
-class ChartPrice implements ShouldBroadcast
+class OrderCreatePurchase
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public $price;
-
-    /**
-     * @throws RandomException
-     */
     public function __construct()
     {
-        $this->price = random_int(300000 , 400000);
+        //
     }
 
     /**
@@ -35,12 +30,7 @@ class ChartPrice implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('gold-price-channel'),
+            new PrivateChannel('channel-name'),
         ];
-    }
-
-    public function broadcastAs(): string
-    {
-        return 'gold-price.fake';
     }
 }

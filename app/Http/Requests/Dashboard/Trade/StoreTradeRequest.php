@@ -21,11 +21,10 @@ class StoreTradeRequest extends FormRequest
      */
     public function rules(): array
     {
-        dd($this->all());
         return [
             "amount" => "required|numeric",
             "fee" => "required|numeric",
-            "type" => 'required|in:buy,sell',
+            "type" => 'required|in:purchase,sale',
             "tp" => 'nullable|numeric',
             "sl" => 'nullable|numeric',
         ];

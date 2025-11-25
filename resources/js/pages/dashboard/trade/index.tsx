@@ -35,7 +35,7 @@ export default function TradePage({
         if (!ch) return;
 
         ch.here((members) => {
-            console.log('اعضای فعلی:', members);
+            // console.log('اعضای فعلی:', members);
             // setUsers(members);
             setOnlineUsers(members.length);
         });
