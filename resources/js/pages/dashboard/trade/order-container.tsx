@@ -12,7 +12,7 @@ import SalesTransaction from '@/pages/dashboard/trade/sales-transaction';
 import order from '@/routes/order';
 import { useForm } from '@inertiajs/react';
 import { useEchoPresence } from '@laravel/echo-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 export default function OrderContainer(price_limit: object) {
@@ -41,10 +41,10 @@ export default function OrderContainer(price_limit: object) {
             [name]: '',
         }));
     };
-
-    const handleSubmit =
-        (orderType: 'buy' | 'sell') => (e: React.FormEvent) => {
+    const handleSubmit = (type:'buy'| 'sell') => (e: React.FormEvent) => {
             e.preventDefault();
+            data.type = type
+            const newErrors: Record<string, string> = {};
             if (!price) return;
             setLocalErrors({});
             if (!data.amount) {
@@ -55,17 +55,13 @@ export default function OrderContainer(price_limit: object) {
                 newErrors.amount = 'حجم باید بین 1 تا 10 باشه';
             }
 
-            const computedMaxFee = useMemo(() => {
-                const offset = Math.max(rangeLimit, 0);
-                const base = realMoney ? price + maxFee : maxFee;
-                return base + offset;
-            }, [rangeLimit, realMoney, price, maxFee]);
+            let computedMaxFee = maxFee;
+            let computedMinFee = -maxFee;
 
-            const computedMinFee = useMemo(() => {
-                const offset = Math.min(rangeLimit, 0);
-                const base = realMoney ? price - maxFee : -maxFee;
-                return base + offset;
-            }, [rangeLimit, realMoney, price, maxFee]);
+            if (realMoney) {
+                computedMaxFee = maxFee + price;
+                computedMinFee = price - maxFee;
+            }
 
             if (!data.fee) {
                 newErrors.fee = 'قیمت الزامیه';
@@ -87,23 +83,21 @@ export default function OrderContainer(price_limit: object) {
                 setLocalErrors(newErrors);
                 return;
             }
-            setData({
-                ...data,
-                type: orderType,
-            });
-            post(order.store(data), {
-                preserveScroll: true,
+            // @ts-ignore
+            post(order.store(), {
+                preserveScroll: false,
                 onSuccess: () => {
                     toast.success('پورتفو با موفقیت ساخته شد 🎉');
                     reset();
                     setLocalErrors({});
                 },
                 onError: () => {
-                    toast.error('خطا داری ');
+                    toast.error('خطا داری');
                     setLocalErrors(errors);
                 },
             });
         };
+
     const { channel } = useEchoPresence('gold-price-channel');
 
     useEffect(() => {
@@ -206,7 +200,7 @@ export default function OrderContainer(price_limit: object) {
                                             onClick={handleSubmit('buy')}
                                             disabled={processing}
                                             className={'w-full bg-green-500'}
-                                            type={'submit'}
+                                            type={'button'}
                                         >
                                             خرید
                                         </Button>
@@ -214,7 +208,7 @@ export default function OrderContainer(price_limit: object) {
                                             className={'bg-red-500'}
                                             onClick={handleSubmit('sell')}
                                             disabled={processing}
-                                            type={'submit'}
+                                            type={'button'}
                                         >
                                             فروش
                                         </Button>

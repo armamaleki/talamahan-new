@@ -12,6 +12,7 @@ class OrderController extends Controller
 {
     public function store(StoreTradeRequest $request)
     {
+        dd($request->all());
         $data = $request->all();
         $data['start'] = $data['amount'] * 1000;
         $data['end'] = $data['amount'] * 1000;

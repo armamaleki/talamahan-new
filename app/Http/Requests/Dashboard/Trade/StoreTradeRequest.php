@@ -21,6 +21,7 @@ class StoreTradeRequest extends FormRequest
      */
     public function rules(): array
     {
+        dd($this->all());
         return [
             "amount" => "required|numeric",
             "fee" => "required|numeric",
