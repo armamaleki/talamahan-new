@@ -1,14 +1,14 @@
+import CreatePortfolio from '@/components/create-portfolio';
+import TradingViewChart from '@/components/trading-view-chart';
 import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
+import OrderContainer from '@/pages/dashboard/trade/order-container';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useEchoPresence } from '@laravel/echo-react';
-import TradingViewChart from '@/components/trading-view-chart';
-import CreatePortfolio from '@/components/create-portfolio';
-import OrderContainer from '@/pages/dashboard/trade/order-container';
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -22,6 +22,8 @@ export default function TradePage({
     AmountOfMoneyInTheWallet,
     portfolioItem,
     settingItem,
+    purchasesItems,
+    sellersItems,
 }) {
     const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState(0);
@@ -134,7 +136,11 @@ export default function TradePage({
                                     walletBalance={AmountOfMoneyInTheWallet}
                                 />
                             )}
-                            <OrderContainer price_limit={settingItem.data.price_limit} />
+                            <OrderContainer
+                                sellersItems={sellersItems}
+                                purchasesItems={purchasesItems}
+                                price_limit={settingItem.data.price_limit}
+                            />
                             <div>
                                 <Tabs
                                     defaultValue="account"

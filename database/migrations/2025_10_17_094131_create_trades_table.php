@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreignId('end_id')->nullable()->constrained('trades')->onDelete('cascade');//به کی فروخته
             $table->softDeletes();
             $table->timestamps();
+            $table->index(['type', 'created_at']);
         });
     }
 

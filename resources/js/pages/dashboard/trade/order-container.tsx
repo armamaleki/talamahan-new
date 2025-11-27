@@ -15,7 +15,7 @@ import { useEchoPresence } from '@laravel/echo-react';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function OrderContainer(price_limit: object) {
+export default function OrderContainer({ price_limit, purchasesItems, sellersItems }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         amount: '',
         fee: '',
@@ -27,7 +27,7 @@ export default function OrderContainer(price_limit: object) {
     const [localErrors, setLocalErrors] = useState({});
     const [price, setPrice] = useState(0);
     const [realMoney, setRealMoney] = useState(false);
-    const maxFee = Number(price_limit.price_limit) || 10;
+    const maxFee = Number(price_limit) || 10;
     const [rangeLimit, setRangeLimit] = useState(0);
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,62 +41,62 @@ export default function OrderContainer(price_limit: object) {
             [name]: '',
         }));
     };
-    const handleSubmit = (type:'buy'| 'sell') => (e: React.FormEvent) => {
-            e.preventDefault();
-            data.type = type
-            const newErrors: Record<string, string> = {};
-            if (!price) return;
-            setLocalErrors({});
-            if (!data.amount) {
-                newErrors.amount = 'حجم الزامیه';
-            } else if (isNaN(data.amount)) {
-                newErrors.amount = 'فقط عدد وارد کنید';
-            } else if (Number(data.amount) < 1 || Number(data.amount) > 10) {
-                newErrors.amount = 'حجم باید بین 1 تا 10 باشه';
-            }
+    const handleSubmit = (type: 'buy' | 'sell') => (e: React.FormEvent) => {
+        e.preventDefault();
+        data.type = type;
+        const newErrors: Record<string, string> = {};
+        if (!price) return;
+        setLocalErrors({});
+        if (!data.amount) {
+            newErrors.amount = 'حجم الزامیه';
+        } else if (isNaN(data.amount)) {
+            newErrors.amount = 'فقط عدد وارد کنید';
+        } else if (Number(data.amount) < 1 || Number(data.amount) > 10) {
+            newErrors.amount = 'حجم باید بین 1 تا 10 باشه';
+        }
 
-            let computedMaxFee = maxFee;
-            let computedMinFee = -maxFee;
+        let computedMaxFee = maxFee;
+        let computedMinFee = -maxFee;
 
-            if (realMoney) {
-                computedMaxFee = maxFee + price;
-                computedMinFee = price - maxFee;
-            }
+        if (realMoney) {
+            computedMaxFee = maxFee + price;
+            computedMinFee = price - maxFee;
+        }
 
-            if (!data.fee) {
-                newErrors.fee = 'قیمت الزامیه';
-            } else if (isNaN(data.fee)) {
-                newErrors.fee = 'فقط عدد وارد کنید';
-            } else if (Number(data.fee) > computedMaxFee) {
-                newErrors.fee = `نباید بیشتر از ${computedMaxFee} باشد`;
-            } else if (Number(data.fee) < computedMinFee) {
-                newErrors.fee = `نباید کم تر از ${computedMinFee} باشد`;
-            }
+        if (!data.fee) {
+            newErrors.fee = 'قیمت الزامیه';
+        } else if (isNaN(data.fee)) {
+            newErrors.fee = 'فقط عدد وارد کنید';
+        } else if (Number(data.fee) > computedMaxFee) {
+            newErrors.fee = `نباید بیشتر از ${computedMaxFee} باشد`;
+        } else if (Number(data.fee) < computedMinFee) {
+            newErrors.fee = `نباید کم تر از ${computedMinFee} باشد`;
+        }
 
-            if (isNaN(data.tp)) {
-                newErrors.tp = 'فقط عدد وارد کنید';
-            } else if (isNaN(data.sl)) {
-                newErrors.sl = 'فقط عدد وارد کنید';
-            }
+        if (isNaN(data.tp)) {
+            newErrors.tp = 'فقط عدد وارد کنید';
+        } else if (isNaN(data.sl)) {
+            newErrors.sl = 'فقط عدد وارد کنید';
+        }
 
-            if (Object.keys(newErrors).length > 0) {
-                setLocalErrors(newErrors);
-                return;
-            }
-            // @ts-ignore
-            post(order.store(), {
-                preserveScroll: false,
-                onSuccess: () => {
-                    toast.success('پورتفو با موفقیت ساخته شد 🎉');
-                    reset();
-                    setLocalErrors({});
-                },
-                onError: () => {
-                    toast.error('خطا داری');
-                    setLocalErrors(errors);
-                },
-            });
-        };
+        if (Object.keys(newErrors).length > 0) {
+            setLocalErrors(newErrors);
+            return;
+        }
+        // @ts-ignore
+        post(order.store(), {
+            preserveScroll: false,
+            onSuccess: () => {
+                toast.success('پورتفو با موفقیت ساخته شد 🎉');
+                reset();
+                setLocalErrors({});
+            },
+            onError: () => {
+                toast.error('خطا داری');
+                setLocalErrors(errors);
+            },
+        });
+    };
 
     const { channel } = useEchoPresence('gold-price-channel');
 
@@ -113,12 +113,12 @@ export default function OrderContainer(price_limit: object) {
             <ToastContainer />
             <div className={`grid grid-cols-6 gap-2`}>
                 <div className={`col-span-2 rounded-md border border-gray-600`}>
-                    <SalesTransaction />
+                    <SalesTransaction sellersItems={sellersItems} />
                     <div className="flex w-full items-center justify-center bg-fuchsia-400 p-2">
                         <p>{price.toLocaleString('fa-IR')}</p>
                         <p>:مظنه</p>
                     </div>
-                    <PurchaseTransaction />
+                    <PurchaseTransaction purchasesItems={purchasesItems} />
                 </div>
                 <div
                     className={`col-span-4 w-full rounded-md border border-gray-600 p-2`}
@@ -145,8 +145,8 @@ export default function OrderContainer(price_limit: object) {
                                 </div>
                                 <Slider
                                     value={[rangeLimit]}
-                                    min={-price_limit.price_limit}
-                                    max={price_limit.price_limit}
+                                    min={-price_limit}
+                                    max={price_limit}
                                     step={1}
                                     onValueChange={(value) => {
                                         setRangeLimit(value[0]);
@@ -197,7 +197,7 @@ export default function OrderContainer(price_limit: object) {
                                     />
                                     <ButtonGroup>
                                         <Button
-                                            onClick={handleSubmit('buy')}
+                                            onClick={handleSubmit('purchase')}
                                             disabled={processing}
                                             className={'w-full bg-green-500'}
                                             type={'button'}
@@ -206,7 +206,7 @@ export default function OrderContainer(price_limit: object) {
                                         </Button>
                                         <Button
                                             className={'bg-red-500'}
-                                            onClick={handleSubmit('sell')}
+                                            onClick={handleSubmit('sale')}
                                             disabled={processing}
                                             type={'button'}
                                         >

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Events\OrderCreatePurchase;
+use App\Events\OrderCreateSale;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Trade\StoreTradeRequest;
 use App\Models\Trade;
@@ -17,10 +19,10 @@ class OrderController extends Controller
         $data['user_id'] = auth()->id();
         $create = trade::create($data);
         if ($create->type == 'purchase') {
-
+            event(new OrderCreatePurchase($create));
         }
         if ($create->type == 'sale') {
-
+            event(new OrderCreateSale($create));
         }
         return back()->with('success', 'معامله شما ایجاد شد');
     }
