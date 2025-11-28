@@ -16,6 +16,8 @@ class TradeController extends Controller
 {
     public function index()
     {
+
+        //@TODO چک کنه ببینه پورتفو داره یا نه
         if(!isMarketOpen()){
             return to_route('dashboard')->with('message' , 'ساعت کاری بازار به اتمام رسیده است.');
         }

@@ -9,81 +9,66 @@ import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PurchaseTransaction from '@/pages/dashboard/trade/purchase-transaction';
 import SalesTransaction from '@/pages/dashboard/trade/sales-transaction';
+import {
+    validateAmount,
+    validateFee,
+    validateSl,
+    validateTp,
+} from '@/pages/dashboard/trade/validator';
 import order from '@/routes/order';
 import { useForm } from '@inertiajs/react';
 import { useEchoPresence } from '@laravel/echo-react';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function OrderContainer({ price_limit, purchasesItems, sellersItems }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        amount: '',
-        fee: '',
-        tp: '',
-        sl: '',
-        type: '',
-    });
+export default function OrderContainer({
+    price_limit,
+    purchasesItems,
+    sellersItems,
+}) {
+    const { data, setData, post, processing, errors, reset, clearErrors } =
+        useForm({
+            amount: '',
+            fee: '',
+            tp: '',
+            sl: '',
+            type: '',
+            realMoney: false,
+        });
     const newErrors: Record<string, string> = {};
     const [localErrors, setLocalErrors] = useState({});
     const [price, setPrice] = useState(0);
     const [realMoney, setRealMoney] = useState(false);
     const maxFee = Number(price_limit) || 10;
     const [rangeLimit, setRangeLimit] = useState(0);
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-        setLocalErrors((prev) => ({
-            ...prev,
-            [name]: '',
-        }));
+    const handleChange = (name: string, value: string) => {
+        setData(name, value);
+        let error = '';
+        if (name === 'amount') error = validateAmount(value);
+        if (name === 'fee')
+            error = validateFee(value, maxFee, realMoney, price);
+        if (name === 'tp') error = validateTp(value);
+        if (name === 'sl') error = validateSl(value);
+        setLocalErrors((prev) => ({ ...prev, [name]: error }));
     };
     const handleSubmit = (type: 'buy' | 'sell') => (e: React.FormEvent) => {
         e.preventDefault();
-        data.type = type;
-        const newErrors: Record<string, string> = {};
         if (!price) return;
+        data.type = type;
+        data.realMoney = realMoney
+        clearErrors();
         setLocalErrors({});
-        if (!data.amount) {
-            newErrors.amount = 'حجم الزامیه';
-        } else if (isNaN(data.amount)) {
-            newErrors.amount = 'فقط عدد وارد کنید';
-        } else if (Number(data.amount) < 1 || Number(data.amount) > 10) {
-            newErrors.amount = 'حجم باید بین 1 تا 10 باشه';
-        }
-
-        let computedMaxFee = maxFee;
-        let computedMinFee = -maxFee;
-
-        if (realMoney) {
-            computedMaxFee = maxFee + price;
-            computedMinFee = price - maxFee;
-        }
-
-        if (!data.fee) {
-            newErrors.fee = 'قیمت الزامیه';
-        } else if (isNaN(data.fee)) {
-            newErrors.fee = 'فقط عدد وارد کنید';
-        } else if (Number(data.fee) > computedMaxFee) {
-            newErrors.fee = `نباید بیشتر از ${computedMaxFee} باشد`;
-        } else if (Number(data.fee) < computedMinFee) {
-            newErrors.fee = `نباید کم تر از ${computedMinFee} باشد`;
-        }
-
-        if (isNaN(data.tp)) {
-            newErrors.tp = 'فقط عدد وارد کنید';
-        } else if (isNaN(data.sl)) {
-            newErrors.sl = 'فقط عدد وارد کنید';
-        }
-
-        if (Object.keys(newErrors).length > 0) {
-            setLocalErrors(newErrors);
+        const errors = {
+            amount: validateAmount(data.amount),
+            fee: validateFee(data.fee, maxFee, realMoney, price),
+            tp: validateTp(data.tp),
+            sl: validateSl(data.sl),
+        };
+        const hasError = Object.values(errors).some((err) => err !== null && err !== '');
+        if (hasError) {
+            setLocalErrors(errors);
             return;
         }
-        // @ts-ignore
         post(order.store(), {
             preserveScroll: false,
             onSuccess: () => {
@@ -158,7 +143,12 @@ export default function OrderContainer({ price_limit, purchasesItems, sellersIte
                                         type="text"
                                         placeholder={'max:12'}
                                         value={data.amount}
-                                        onChange={handleChange}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'amount',
+                                                e.target.value,
+                                            )
+                                        }
                                     />
                                     <InputError
                                         message={
@@ -168,9 +158,11 @@ export default function OrderContainer({ price_limit, purchasesItems, sellersIte
                                     <Input
                                         name="fee"
                                         type="text"
-                                        placeholder={`for example ${realMoney ? '20450' : '10'} max: ${price_limit.price_limit}`}
+                                        placeholder={`for example ${realMoney ? price : '10'} max: ${price_limit}`}
                                         value={data.fee}
-                                        onChange={handleChange}
+                                        onChange={(e) =>
+                                            handleChange('fee', e.target.value)
+                                        }
                                     />
                                     <InputError
                                         message={errors.fee || localErrors.fee}
@@ -180,7 +172,9 @@ export default function OrderContainer({ price_limit, purchasesItems, sellersIte
                                         type="text"
                                         placeholder="Profit limit"
                                         value={data.tp}
-                                        onChange={handleChange}
+                                        onChange={(e) =>
+                                            handleChange('tp', e.target.value)
+                                        }
                                     />
                                     <InputError
                                         message={errors.tp || localErrors.tp}
@@ -190,7 +184,9 @@ export default function OrderContainer({ price_limit, purchasesItems, sellersIte
                                         type="text"
                                         placeholder="Limit of loss"
                                         value={data.sl}
-                                        onChange={handleChange}
+                                        onChange={(e) =>
+                                            handleChange('sl', e.target.value)
+                                        }
                                     />
                                     <InputError
                                         message={errors.sl || localErrors.sl}
