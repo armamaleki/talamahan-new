@@ -12,16 +12,21 @@ class OrderController extends Controller
 {
     public function store(StoreTradeRequest $request)
     {
+        //@TODO ریل تایم کردن ارور ها ی سمت کاربر
+        // اگر عدد وا
         $data = $request->all();
-        $data['start'] = $data['amount'] * 1000;
-        $data['end'] = $data['amount'] * 1000;
-        $data['type'] = 'sale';
-        $data['user_id'] = auth()->id();
-        $create = trade::create($data);
-        if ($create->type == 'purchase') {
+        if ($data['type'] == 'purchase') {
+            $data['start'] = 47000 - 9 ;
+            $data['type'] = 'sale';
+            $data['user_id'] = auth()->id();
+            $create = trade::create($data);
             event(new OrderCreatePurchase($create));
         }
-        if ($create->type == 'sale') {
+        if ($data['type'] == 'sale') {
+            $data['start'] = 47000 + 9 ;
+            $data['type'] = 'sale';
+            $data['user_id'] = auth()->id();
+            $create = trade::create($data);
             event(new OrderCreateSale($create));
         }
         return back()->with('success', 'معامله شما ایجاد شد');

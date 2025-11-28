@@ -24,7 +24,7 @@ class ChartPrice implements ShouldBroadcast
      */
     public function __construct()
     {
-        $this->price = random_int(300000 , 400000);
+        $this->price = 47000;
     }
 
     /**

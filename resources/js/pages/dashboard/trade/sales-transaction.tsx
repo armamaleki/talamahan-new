@@ -11,7 +11,7 @@ export default function SalesTransaction({ sellersItems }) {
         const ch = channel();
         if (!ch) return;
         ch.listen(".order.create.buy", (payload) => {
-            setData(payload.trade.start); // اگر می‌خواهی sellersItems را هم بروز کنی، اینجا اضافه کن
+            setData(47000 -10); // اگر می‌خواهی sellersItems را هم بروز کنی، اینجا اضافه کن
         });
     }, [channel]);
 
