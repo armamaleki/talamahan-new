@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -10,16 +9,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCreatePurchase
+class OrderCreatePurchase implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public $order;
+
+    public function __construct($order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -27,10 +28,13 @@ class OrderCreatePurchase
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
+    public function broadcastOn(): PrivateChannel
     {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
+        return new PrivateChannel('trade-purchase');
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'trade-purchase-create';
     }
 }

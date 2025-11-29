@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Dashboard\Prices\GoldPriceCollection;
 use App\Http\Resources\Dashboard\Trade\SettingResource;
-use App\Models\GoldPrice;
 use App\Models\Setting;
 use App\Models\Trade;
-use App\Models\Wallet;
 use Carbon\Carbon;
 use Inertia\Inertia;
 
@@ -18,25 +15,25 @@ class TradeController extends Controller
     {
 
         //@TODO چک کنه ببینه پورتفو داره یا نه
-        if(!isMarketOpen()){
-            return to_route('dashboard')->with('message' , 'ساعت کاری بازار به اتمام رسیده است.');
+        if (!isMarketOpen()) {
+            return to_route('dashboard')->with('message', 'ساعت کاری بازار به اتمام رسیده است.');
         }
         $setting = Setting::latest()->first();
         $start = Carbon::today()->setTimeFromTimeString($setting->open);
-        $end   = Carbon::today()->setTimeFromTimeString($setting->close);
+        $end = Carbon::today()->setTimeFromTimeString($setting->close);
         $AmountOfMoneyInTheWallet = auth()->user()->wallet->balance ?? 0;
-        $portfolio = auth()->user()->portfolios()->where('status' , 'open')->latest()->first();
-        $sellers = Trade::where('type', 'sale')
+        $portfolio = auth()->user()->portfolios()->where('status', 'open')->latest()->first();
+        $sellers = Trade::whereBetween('created_at', [$start, $end])
+            ->where('type', 'sale')
             ->select('id', 'start')
-            ->whereBetween('created_at', [$start, $end])
             ->latest()
             ->get();
-        $purchases = Trade::where('type', 'purchase')
+        $purchases = Trade::whereBetween('created_at', [$start, $end])
+            ->where('type', 'purchase')
             ->select('id', 'start')
-            ->whereBetween('created_at', [$start, $end])
             ->latest()
             ->get();
-        return Inertia::render('dashboard/trade/index' , [
+        return Inertia::render('dashboard/trade/index', [
             'AmountOfMoneyInTheWallet' => $AmountOfMoneyInTheWallet,
             'portfolioItem' => $portfolio,
             'settingItem' => new SettingResource($setting),

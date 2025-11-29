@@ -27,28 +27,33 @@ class OrderController extends Controller
         $start = Carbon::today()->setTimeFromTimeString($setting->open);
         $end = Carbon::today()->setTimeFromTimeString($setting->close);
         $portfolio = auth()->user()->portfolios()
-            ->where('status', 'open')
             ->whereBetween('created_at', [$start, $end])
+            ->where('status', 'dd')
             ->latest()->first();
+        if (!$portfolio) {
+            return back()->withErrors('هیچ پورتفویی وجود ندارد' , 'error');
+        }
         if ($data['type'] == 'purchase') {
             $data['start'] = 47000 - 9;
             $data['type'] = 'purchase';
             $data['user_id'] = auth()->id();
             $data['portfolio_id'] = $portfolio->id;
             $data['status'] = 'open';
-            $data['profit_limit'] = 'da';
-            $data['loss_limit'] = 'da';
+            $data['profit_limit'] = $request['tp'];
+            $data['loss_limit'] = $request['sl'];
             $create = trade::create($data);
-            event(new OrderCreatePurchase($create));
+            event(new OrderCreatePurchase($create->start));
         }
-
-
         if ($data['type'] == 'sale') {
             $data['start'] = 47000 + 9;
             $data['type'] = 'sale';
+            $data['portfolio_id'] = $portfolio->id;
             $data['user_id'] = auth()->id();
+            $data['status'] = 'open';
+            $data['profit_limit'] = $request['tp'];
+            $data['loss_limit'] = $request['sl'];
             $create = trade::create($data);
-            event(new OrderCreateSale($create));
+            event(new OrderCreateSale($create->start));
         }
         return back()->with('success', 'معامله شما ایجاد شد');
     }

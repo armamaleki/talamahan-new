@@ -33,7 +33,7 @@ export default function OrderContainer({
             tp: '',
             sl: '',
             type: '',
-            realMoney: false,
+            start: '',
         });
     const newErrors: Record<string, string> = {};
     const [localErrors, setLocalErrors] = useState({});
@@ -55,7 +55,6 @@ export default function OrderContainer({
         e.preventDefault();
         if (!price) return;
         data.type = type;
-        data.realMoney = realMoney
         clearErrors();
         setLocalErrors({});
         const errors = {
@@ -69,15 +68,19 @@ export default function OrderContainer({
             setLocalErrors(errors);
             return;
         }
+        // @TODO اینو از پهلوان مجدد بگیرش ): ): خنگم خودتی پهلوان
+        data.start = realMoney? 1000 :2000
+        //-----
         post(order.store(), {
             preserveScroll: false,
             onSuccess: () => {
-                toast.success('پورتفو با موفقیت ساخته شد 🎉');
+                // toast.success('پورتفو با موفقیت ساخته شد 🎉');
                 reset();
                 setLocalErrors({});
             },
-            onError: () => {
-                toast.error('خطا داری');
+            onError: (errors) => {
+                console.log(errors.error);
+                toast.error(errors.error[0])
                 setLocalErrors(errors);
             },
         });
@@ -98,12 +101,12 @@ export default function OrderContainer({
             <ToastContainer />
             <div className={`grid grid-cols-6 gap-2`}>
                 <div className={`col-span-2 rounded-md border border-gray-600`}>
-                    <SalesTransaction sellersItems={sellersItems} />
+                    <PurchaseTransaction purchasesItems={purchasesItems} />
                     <div className="flex w-full items-center justify-center bg-fuchsia-400 p-2">
                         <p>{price.toLocaleString('fa-IR')}</p>
                         <p>:مظنه</p>
                     </div>
-                    <PurchaseTransaction purchasesItems={purchasesItems} />
+                    <SalesTransaction sellersItems={sellersItems} />
                 </div>
                 <div
                     className={`col-span-4 w-full rounded-md border border-gray-600 p-2`}

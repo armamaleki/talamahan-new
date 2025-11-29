@@ -12,7 +12,7 @@ class MarketSettings
     protected static function getSettings()
     {
         return Cache::rememberForever('settings.record', function () {
-            return Setting::first(); // چون فقط یه رکورد داریم
+            return Setting::first();
         });
     }
     public static function open()
