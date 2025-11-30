@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('type', ['sale', 'purchase'])->default('purchase'); // نوع ترید
             $table->integer('start')->nullable(); // قیمت شروع معامله
             $table->integer('end')->nullable(); // قیمت پایان معامله
+            $table->integer('fee')->nullable(); // مبلغ پیشنهاد شده
             $table->integer('profit_limit')->nullable(); // حد سود
             $table->integer('loss_limit')->nullable(); // حد زرر
             $table->enum('status', ['open', 'close'])->default('open'); // نوع ترید

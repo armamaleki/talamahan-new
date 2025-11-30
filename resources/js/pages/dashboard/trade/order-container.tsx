@@ -51,40 +51,46 @@ export default function OrderContainer({
         if (name === 'sl') error = validateSl(value);
         setLocalErrors((prev) => ({ ...prev, [name]: error }));
     };
-    const handleSubmit = (type: 'buy' | 'sell') => (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!price) return;
-        data.type = type;
-        clearErrors();
-        setLocalErrors({});
-        const errors = {
-            amount: validateAmount(data.amount),
-            fee: validateFee(data.fee, maxFee, realMoney, price),
-            tp: validateTp(data.tp),
-            sl: validateSl(data.sl),
-        };
-        const hasError = Object.values(errors).some((err) => err !== null && err !== '');
-        if (hasError) {
-            setLocalErrors(errors);
-            return;
-        }
-        // @TODO اینو از پهلوان مجدد بگیرش ): ): خنگم خودتی پهلوان
-        data.start = realMoney? 1000 :2000
-        //-----
-        post(order.store(), {
-            preserveScroll: false,
-            onSuccess: () => {
-                // toast.success('پورتفو با موفقیت ساخته شد 🎉');
-                reset();
-                setLocalErrors({});
-            },
-            onError: (errors) => {
-                console.log(errors.error);
-                toast.error(errors.error[0])
+    const handleSubmit =
+        (type: 'purchase' | 'sale') => (e: React.FormEvent) => {
+            e.preventDefault();
+            if (!price) return;
+            data.type = type;
+            clearErrors();
+            setLocalErrors({});
+            const errors = {
+                amount: validateAmount(data.amount),
+                fee: validateFee(data.fee, maxFee, realMoney, price),
+                tp: validateTp(data.tp),
+                sl: validateSl(data.sl),
+            };
+            const hasError = Object.values(errors).some(
+                (err) => err !== null && err !== '',
+            );
+            if (hasError) {
                 setLocalErrors(errors);
-            },
-        });
-    };
+                return;
+            }
+
+            if (!realMoney) {
+                data.fee = type === 'sale' ? price - data.amount : price + data.amount;
+            }
+            console.log(data);
+            //-----
+            // post(order.store(), {
+            //     preserveScroll: false,
+            //     onSuccess: () => {
+            //         // toast.success('پورتفو با موفقیت ساخته شد 🎉');
+            //         reset();
+            //         setLocalErrors({});
+            //     },
+            //     onError: (errors) => {
+            //         console.log(errors.error);
+            //         toast.error(errors.error[0]);
+            //         setLocalErrors(errors);
+            //     },
+            // });
+        };
 
     const { channel } = useEchoPresence('gold-price-channel');
 
@@ -127,8 +133,7 @@ export default function OrderContainer({
                                         id="money"
                                     />
                                     <Label htmlFor="money">
-                                        در صورت فعال بودن باید قیمت واقعی
-                                        بزاری{' '}
+                                        در صورت فعال بودن باید قیمت واقعی بزاری
                                     </Label>
                                 </div>
                                 <Slider

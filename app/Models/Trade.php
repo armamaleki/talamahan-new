@@ -17,6 +17,7 @@ class Trade extends Model
         'type',
         'start',
         'end',
+        'fee',
         'profit_limit',
         'loss_limit',
         'status',

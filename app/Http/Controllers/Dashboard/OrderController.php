@@ -28,11 +28,12 @@ class OrderController extends Controller
         $end = Carbon::today()->setTimeFromTimeString($setting->close);
         $portfolio = auth()->user()->portfolios()
             ->whereBetween('created_at', [$start, $end])
-            ->where('status', 'dd')
+            ->where('status', 'open')
             ->latest()->first();
         if (!$portfolio) {
             return back()->withErrors('هیچ پورتفویی وجود ندارد' , 'error');
         }
+
         if ($data['type'] == 'purchase') {
             $data['start'] = 47000 - 9;
             $data['type'] = 'purchase';
@@ -43,7 +44,9 @@ class OrderController extends Controller
             $data['loss_limit'] = $request['sl'];
             $create = trade::create($data);
             event(new OrderCreatePurchase($create->start));
+//            @todo یه جاب برای پاک کردن پیشنهاد معامله در 1 دقیقه
         }
+
         if ($data['type'] == 'sale') {
             $data['start'] = 47000 + 9;
             $data['type'] = 'sale';
