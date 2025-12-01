@@ -22,7 +22,12 @@ class TradeController extends Controller
         $start = Carbon::today()->setTimeFromTimeString($setting->open);
         $end = Carbon::today()->setTimeFromTimeString($setting->close);
         $AmountOfMoneyInTheWallet = auth()->user()->wallet->balance ?? 0;
-        $portfolio = auth()->user()->portfolios()->where('status', 'open')->latest()->first();
+        $portfolio = auth()->user()
+            ->portfolios()
+            ->whereBetween('created_at', [$start, $end])
+            ->where('status', 'open')
+            ->latest()
+            ->first();
         $sellers = Trade::whereBetween('created_at', [$start, $end])
             ->where('type', 'sale')
             ->select('id', 'start')

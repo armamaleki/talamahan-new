@@ -73,23 +73,20 @@ export default function OrderContainer({
             }
 
             if (!realMoney) {
-                data.fee = type === 'sale' ? price - data.amount : price + data.amount;
+                data.fee = type === 'sale' ? Number(price) + Number(data.amount) : Number(price) - Number(data.amount);
             }
-            console.log(data);
-            //-----
-            // post(order.store(), {
-            //     preserveScroll: false,
-            //     onSuccess: () => {
-            //         // toast.success('پورتفو با موفقیت ساخته شد 🎉');
-            //         reset();
-            //         setLocalErrors({});
-            //     },
-            //     onError: (errors) => {
-            //         console.log(errors.error);
-            //         toast.error(errors.error[0]);
-            //         setLocalErrors(errors);
-            //     },
-            // });
+            post(order.store(), {
+                preserveScroll: false,
+                onSuccess: () => {
+                    // toast.success('پورتفو با موفقیت ساخته شد 🎉');
+                    reset();
+                    setLocalErrors({});
+                },
+                onError: (errors) => {
+                    toast.error(errors.error[0]);
+                    setLocalErrors(errors);
+                },
+            });
         };
 
     const { channel } = useEchoPresence('gold-price-channel');

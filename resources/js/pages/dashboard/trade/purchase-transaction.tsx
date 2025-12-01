@@ -8,7 +8,6 @@ export default function PurchaseTransaction({purchasesItems}) {
         const ch = channel();
         if (!ch) return;
         ch.listen('.trade-purchase-create', (payload) => {
-            console.log('dsdsdsd');
             setData(payload)
         });
     }, []);

@@ -6,6 +6,7 @@ use App\Events\OrderCreatePurchase;
 use App\Events\OrderCreateSale;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Trade\StoreTradeRequest;
+use App\Jobs\DeleteTradeAfterOneMinute;
 use App\Models\Setting;
 use App\Models\Trade;
 use Carbon\Carbon;
@@ -35,20 +36,18 @@ class OrderController extends Controller
         }
 
         if ($data['type'] == 'purchase') {
-            $data['start'] = 47000 - 9;
             $data['type'] = 'purchase';
             $data['user_id'] = auth()->id();
             $data['portfolio_id'] = $portfolio->id;
             $data['status'] = 'open';
             $data['profit_limit'] = $request['tp'];
             $data['loss_limit'] = $request['sl'];
-            $create = trade::create($data);
-            event(new OrderCreatePurchase($create->start));
-//            @todo یه جاب برای پاک کردن پیشنهاد معامله در 1 دقیقه
+            $trade = trade::create($data);
+            event(new OrderCreatePurchase($trade->fee));
+            DeleteTradeAfterOneMinute::dispatch($trade->id)->delay(now()->addMinute());
         }
 
         if ($data['type'] == 'sale') {
-            $data['start'] = 47000 + 9;
             $data['type'] = 'sale';
             $data['portfolio_id'] = $portfolio->id;
             $data['user_id'] = auth()->id();
@@ -57,6 +56,7 @@ class OrderController extends Controller
             $data['loss_limit'] = $request['sl'];
             $create = trade::create($data);
             event(new OrderCreateSale($create->start));
+            DeleteTradeAfterOneMinute::dispatch($trade->id)->delay(now()->addMinute());
         }
         return back()->with('success', 'معامله شما ایجاد شد');
     }
