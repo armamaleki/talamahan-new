@@ -27,32 +27,22 @@ export default function TradePage({
 }) {
     const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState(0);
-    const { channel, listen, stopListening, leaveChannel } = useEchoPresence(
+    const { channel, stopListening, leaveChannel } = useEchoPresence(
         'gold-trade-lobby',
         'GoldTradeLobby',
     );
     useEffect(() => {
         const ch = channel();
-
         if (!ch) return;
-
         ch.here((members) => {
-            // console.log('اعضای فعلی:', members);
-            // setUsers(members);
             setOnlineUsers(members.length);
         });
-
         ch.joining((user) => {
-            // console.log("کاربر جدید:", user);
             setUsers((prev) => [...prev, user]);
-
             setOnlineUsers((prev) => prev + 1);
         });
-
         ch.leaving((user) => {
-            // console.log("کاربر خارج شد:", user);
             setUsers((prev) => prev.filter((u) => u.id !== user.id));
-
             setOnlineUsers((prev) => Math.max(prev - 1, 0));
         });
         ch.listen('.gold-trade.notification', (data) => {
@@ -68,11 +58,17 @@ export default function TradePage({
             });
         });
 
+
+        // ch.listenForWhisper('purchase', (payload) => {
+        //     console.log('Whisper payload-----------------:', payload);
+        // });
+
         return () => {
             stopListening();
             leaveChannel();
         };
     }, []);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Trade" />

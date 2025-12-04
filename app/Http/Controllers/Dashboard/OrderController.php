@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Events\OrderCreatePurchase;
 use App\Events\OrderCreateSale;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Trade\StoreTradeRequest;
@@ -32,7 +31,7 @@ class OrderController extends Controller
             ->where('status', 'open')
             ->latest()->first();
         if (!$portfolio) {
-            return back()->withErrors('هیچ پورتفویی وجود ندارد' , 'error');
+            return back()->withErrors('هیچ پورتفویی وجود ندارد', 'error');
         }
 
         if ($data['type'] == 'purchase') {
@@ -43,8 +42,8 @@ class OrderController extends Controller
             $data['profit_limit'] = $request['tp'];
             $data['loss_limit'] = $request['sl'];
             $trade = trade::create($data);
-            event(new OrderCreatePurchase($trade->fee));
-            DeleteTradeAfterOneMinute::dispatch($trade->id)->delay(now()->addMinute());
+            DeleteTradeAfterOneMinute::dispatch($trade->id);
+            return back()->with('success', ['data' => ['id' => $trade->id , 'fee' => $trade->fee], 'message' => 'معامله خرید ثبت شد']);
         }
 
         if ($data['type'] == 'sale') {
@@ -57,7 +56,8 @@ class OrderController extends Controller
             $create = trade::create($data);
             event(new OrderCreateSale($create->start));
             DeleteTradeAfterOneMinute::dispatch($trade->id)->delay(now()->addMinute());
+            return back()->with('success', 'معامله شما ایجاد شد');
         }
-        return back()->with('success', 'معامله شما ایجاد شد');
+
     }
 }

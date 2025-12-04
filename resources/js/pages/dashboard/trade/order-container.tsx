@@ -18,7 +18,7 @@ import {
 import order from '@/routes/order';
 import { useForm } from '@inertiajs/react';
 import { useEchoPresence } from '@laravel/echo-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 export default function OrderContainer({
@@ -35,9 +35,10 @@ export default function OrderContainer({
             type: '',
             start: '',
         });
+    // const { props } = usePage();
     const newErrors: Record<string, string> = {};
     const [localErrors, setLocalErrors] = useState({});
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState(4700);
     const [realMoney, setRealMoney] = useState(false);
     const maxFee = Number(price_limit) || 10;
     const [rangeLimit, setRangeLimit] = useState(0);
@@ -51,6 +52,9 @@ export default function OrderContainer({
         if (name === 'sl') error = validateSl(value);
         setLocalErrors((prev) => ({ ...prev, [name]: error }));
     };
+
+
+    const { channel } = useEchoPresence('gold-trade-lobby', 'GoldTradeLobby');
     const handleSubmit =
         (type: 'purchase' | 'sale') => (e: React.FormEvent) => {
             e.preventDefault();
@@ -73,14 +77,25 @@ export default function OrderContainer({
             }
 
             if (!realMoney) {
-                data.fee = type === 'sale' ? Number(price) + Number(data.amount) : Number(price) - Number(data.amount);
+                data.fee =
+                    type === 'sale'
+                        ? Number(price) + Number(data.amount)
+                        : Number(price) - Number(data.amount);
             }
+
+            const ch = channel();
+            if (!ch) return;
+
             post(order.store(), {
-                preserveScroll: false,
-                onSuccess: () => {
-                    // toast.success('پورتفو با موفقیت ساخته شد 🎉');
+                preserveScroll: true,
+                onSuccess: ({props}) => {
+                    console.log(props.flash.success);
+                    toast.success(props.flash.success.message);
                     reset();
                     setLocalErrors({});
+                    ch.whisper('purchase', {
+                        payload: props.flash.success.data,
+                    });
                 },
                 onError: (errors) => {
                     toast.error(errors.error[0]);
@@ -89,16 +104,6 @@ export default function OrderContainer({
             });
         };
 
-    const { channel } = useEchoPresence('gold-price-channel');
-
-    useEffect(() => {
-        const ch = channel();
-        if (!ch) return;
-
-        ch.listen('.gold-price.fake', (data) => {
-            setPrice(data.price);
-        });
-    }, []);
     return (
         <>
             <ToastContainer />
@@ -117,7 +122,7 @@ export default function OrderContainer({
                     <Tabs defaultValue="order" className="">
                         <TabsList>
                             <TabsTrigger value="order">اوردر</TabsTrigger>
-                            <TabsTrigger value="password">لفظ</TabsTrigger>
+                            <TabsTrigger value="lafz">لفظ</TabsTrigger>
                         </TabsList>
                         <TabsContent value="order">
                             <Card className={'space-y-4 p-2'}>
@@ -217,9 +222,7 @@ export default function OrderContainer({
                                 </div>
                             </Card>
                         </TabsContent>
-                        <TabsContent value="password">
-                            Change your password here.
-                        </TabsContent>
+                        <TabsContent value="lafz">lafz</TabsContent>
                     </Tabs>
                 </div>
             </div>

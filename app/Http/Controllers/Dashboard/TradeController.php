@@ -30,12 +30,12 @@ class TradeController extends Controller
             ->first();
         $sellers = Trade::whereBetween('created_at', [$start, $end])
             ->where('type', 'sale')
-            ->select('id', 'start')
+            ->select('id', 'fee')
             ->latest()
             ->get();
         $purchases = Trade::whereBetween('created_at', [$start, $end])
             ->where('type', 'purchase')
-            ->select('id', 'start')
+            ->select('id', 'fee')
             ->latest()
             ->get();
         return Inertia::render('dashboard/trade/index', [

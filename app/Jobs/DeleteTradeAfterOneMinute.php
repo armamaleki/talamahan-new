@@ -2,9 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Events\GoldTradeLobby;
+use App\Events\TradeDeleted;
 use App\Models\Trade;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Log;
 
 class DeleteTradeAfterOneMinute implements ShouldQueue
@@ -28,6 +31,7 @@ class DeleteTradeAfterOneMinute implements ShouldQueue
     {
         try {
             $this->trade->forceDelete();
+            broadcast(new TradeDeleted($this->trade->id));
         }catch (\Exception $e){
             Log::error($e->getMessage());
         }
